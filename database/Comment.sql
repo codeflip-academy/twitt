@@ -1,0 +1,12 @@
+USE [Twitt]
+
+GO
+
+CREATE TABLE [Comment]
+(
+	[ID] INT PRIMARY KEY IDENTITY(1,2) NOT NULL,
+	[Message] VARCHAR(200),
+	[Author] VARCHAR(50)
+)
+
+GO
