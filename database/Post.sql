@@ -6,8 +6,9 @@ CREATE TABLE [Post]
 (
 	[ID] INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	[Message] VARCHAR(200),
-	[Picture] IMAGE NOT NULL,
-	[Author] VARCHAR(50)
+	[Picture] VARBINARY NULL,
+	[Profile] INT NOT NUll,
+	FOREIGN KEY ([Profile]) REFERENCES [Profile](ID)
 )
 
 GO

@@ -6,7 +6,10 @@ CREATE TABLE [Comment]
 (
 	[ID] INT PRIMARY KEY IDENTITY(1,2) NOT NULL,
 	[Message] VARCHAR(200),
-	[Author] VARCHAR(50)
+	[Profile] INT NOT NULL,
+	[Post] INT NOT NULL,
+	FOREIGN KEY ([Profile]) REFERENCES [Profile](ID),
+	FOREIGN KEY ([Post]) REFERENCES [Post](ID)
 )
 
 GO
