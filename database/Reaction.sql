@@ -4,6 +4,7 @@ GO
 
 CREATE TABLE [Reaction]
 (
+	[ID] INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	[State] BIT NOT NULL,
 	[Profile] INT NOT NULL,
 	[Post] INT NOT NULL,

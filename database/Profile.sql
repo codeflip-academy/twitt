@@ -9,7 +9,7 @@ CREATE TABLE [Profile]
     [UserName] VARCHAR(50) NOT NULL,
     [Password] VARCHAR(16) NOT NULL,
     [Picture] VARBINARY NULL,
-	[Info] VARCHAR(200) NULL,
+	[Description] VARCHAR(200) NULL,
 	[Status] BIT NOT NULL,
 )
 

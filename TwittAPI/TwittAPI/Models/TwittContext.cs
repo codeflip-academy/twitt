@@ -10,7 +10,8 @@ namespace TwittAPI.Models
         {
         }
 
-        public TwittContext(DbContextOptions<TwittContext> options): base(options)
+        public TwittContext(DbContextOptions<TwittContext> options)
+            : base(options)
         {
         }
 
@@ -25,43 +26,57 @@ namespace TwittAPI.Models
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.Author)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Message)
                     .HasMaxLength(200)
                     .IsUnicode(false);
+
+                entity.Property(e => e.PostId).HasColumnName("PostID");
+
+                entity.Property(e => e.ProfileId).HasColumnName("ProfileID");
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.Comment)
+                    .HasForeignKey(d => d.PostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Comment__PostID__3D5E1FD2");
+
+                entity.HasOne(d => d.Profile)
+                    .WithMany(p => p.Comment)
+                    .HasForeignKey(d => d.ProfileId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Comment__Profile__3C69FB99");
             });
 
             modelBuilder.Entity<Post>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.Author)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Message)
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Picture)
-                    .IsRequired()
-                    .HasColumnType("image");
+                entity.Property(e => e.Picture).HasMaxLength(1);
+
+                entity.Property(e => e.ProfileId).HasColumnName("ProfileID");
+
+                entity.HasOne(d => d.Profile)
+                    .WithMany(p => p.Post)
+                    .HasForeignKey(d => d.ProfileId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Post__ProfileID__398D8EEE");
             });
 
             modelBuilder.Entity<Profile>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.Description)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.FullName)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Info)
-                    .HasMaxLength(200)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Password)
@@ -69,7 +84,7 @@ namespace TwittAPI.Models
                     .HasMaxLength(16)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Picture).HasColumnType("image");
+                entity.Property(e => e.Picture).HasMaxLength(1);
 
                 entity.Property(e => e.UserName)
                     .IsRequired()
@@ -79,7 +94,19 @@ namespace TwittAPI.Models
 
             modelBuilder.Entity<Reaction>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.HasOne(d => d.PostNavigation)
+                    .WithMany(p => p.Reaction)
+                    .HasForeignKey(d => d.Post)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Reaction__Post__412EB0B6");
+
+                entity.HasOne(d => d.ProfileNavigation)
+                    .WithMany(p => p.Reaction)
+                    .HasForeignKey(d => d.Profile)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Reaction__Profil__403A8C7D");
             });
 
             OnModelCreatingPartial(modelBuilder);

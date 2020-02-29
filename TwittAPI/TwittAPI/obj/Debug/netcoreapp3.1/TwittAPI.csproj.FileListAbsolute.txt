@@ -127,3 +127,4 @@ C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\bin\D
 C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\obj\Debug\netcoreapp3.1\TwittAPI.dll
 C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\obj\Debug\netcoreapp3.1\TwittAPI.pdb
 C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\obj\Debug\netcoreapp3.1\TwittAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Debug.dll
