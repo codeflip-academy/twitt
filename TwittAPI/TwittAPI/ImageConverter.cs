@@ -111,6 +111,86 @@ namespace TwittAPI
                 }
             }
         }
+
+        public void SendImageToProfile(HttpContext context)
+        {
+             System.Data.SqlClient.SqlDataReader reader = null;
+            System.Data.SqlClient.SqlConnection connection = null;
+            System.Data.SqlClient.SqlCommand selectCommand = null;
+
+            try
+            {
+                 connection = new System.Data.SqlClient.SqlConnection
+		        (System.Configuration.ConfigurationManager.ConnectionStrings["Server=.;Database=Twitt;Integrated Security=True"].ConnectionString);
+		        
+                selectImage = new System.Data.SqlClient.SqlCommand("SELECT Picture from Profile where ID =" + 
+		            context.Request.QueryString["ID"], conn);
+
+                connection.Open();
+
+                reader = selectCommand.ExecuteReader();
+
+                while(reader.Read())
+                {
+                    context.Response.ContentType = "image/jpg";
+                    context.Response.BinaryReader((byte[])reader["Picture"]);
+                }
+
+                if(reader != null)
+                {
+                    reader.Close();
+                }
+
+            }
+            finally
+            {
+                if(connection != null)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public void SendImageToProfile(HttpContext context)
+        {
+             System.Data.SqlClient.SqlDataReader reader = null;
+            System.Data.SqlClient.SqlConnection connection = null;
+            System.Data.SqlClient.SqlCommand selectCommand = null;
+
+            try
+            {
+                 connection = new System.Data.SqlClient.SqlConnection
+		        (System.Configuration.ConfigurationManager.ConnectionStrings["Server=.;Database=Twitt;Integrated Security=True"].ConnectionString);
+		        
+                selectImage = new System.Data.SqlClient.SqlCommand("SELECT Picture from Post where ID =" + 
+		            context.Request.QueryString["ID"], conn);
+
+                connection.Open();
+
+                reader = selectCommand.ExecuteReader();
+
+                while(reader.Read())
+                {
+                    context.Response.ContentType = "image/jpg";
+                    context.Response.BinaryReader((byte[])reader["Picture"]);
+                }
+
+                if(reader != null)
+                {
+                    reader.Close();
+                }
+
+            }
+            finally
+            {
+                if(connection != null)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+
     }
     
 
