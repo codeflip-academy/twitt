@@ -6,24 +6,33 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwittAPI.Models;
+using Microsoft.Extensions.Configuration;
+
 
 namespace TwittAPI.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly TwittContext _context;
 
-        public PostsController(TwittContext context)
+        private IConfiguration _config;
+
+        private readonly TwittContext _context;
+        
+        public PostsController(TwittContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         // GET: api/Posts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPost()
         {
+            //var sql = _config.GetConnectionString("TwittDatabase");
+
             return await _context.Post.ToListAsync();
         }
 
@@ -79,6 +88,8 @@ namespace TwittAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
+
+            //when post is in check lenght under 200 if over return bad request
             _context.Post.Add(post);
             await _context.SaveChangesAsync();
 
