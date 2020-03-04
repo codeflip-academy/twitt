@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwittAPI.Models;
+using Microsoft.Extensions.Configuration;
+
 
 namespace TwittAPI.Controllers
 {
@@ -13,11 +15,15 @@ namespace TwittAPI.Controllers
     [ApiController]
     public class ProfilesController : ControllerBase
     {
+
+        private IConfiguration _config;
+
         private readonly TwittContext _context;
 
-        public ProfilesController(TwittContext context)
+        public ProfilesController(TwittContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         // GET: api/Profiles

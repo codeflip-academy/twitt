@@ -31,7 +31,7 @@ namespace TwittAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPost()
         {
-            var sql = _config.GetConnectionString("TwittDatabase");
+            //var sql = _config.GetConnectionString("TwittDatabase");
 
             return await _context.Post.ToListAsync();
         }
