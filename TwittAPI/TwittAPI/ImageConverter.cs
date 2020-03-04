@@ -111,7 +111,7 @@ namespace TwittAPI
                 }
             }
         }
-
+        //this method sends a image from the profile table.
         public void SendImageToProfile(HttpContext context)
         {
              System.Data.SqlClient.SqlDataReader reader = null;
@@ -150,8 +150,8 @@ namespace TwittAPI
                 }
             }
         }
-
-        public void SendImageToProfile(HttpContext context)
+        // This method sends an image from the post
+        public void SendImageToPost(HttpContext context)
         {
              System.Data.SqlClient.SqlDataReader reader = null;
             System.Data.SqlClient.SqlConnection connection = null;
