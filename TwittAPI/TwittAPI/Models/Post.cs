@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace TwittAPI.Models
 {
@@ -16,8 +17,11 @@ namespace TwittAPI.Models
         public byte[] Picture { get; set; }
         public int ProfileId { get; set; }
 
+        [JsonIgnore]
         public virtual Profile Profile { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Comment> Comment { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Reaction> Reaction { get; set; }
     }
 }
