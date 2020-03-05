@@ -10,32 +10,37 @@ using TwittAPI.Models;
 
 namespace TwittAPI.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly TwittContext _context;
-        private IConfiguration _conifg;
 
+        private IConfiguration _config;
+
+        private readonly TwittContext _context;
+        
         public PostsController(TwittContext context, IConfiguration config)
         {
             _context = context;
-            _conifg = config;
+            _config = config;
         }
 
         // GET: api/Posts
         [HttpGet]
         public IActionResult GetPosts([FromQuery] int page)
         {
+            var pageSize = Convert.ToInt32(_config.GetSection("Pagination")["PageSize"]);
+
             if(page < 1)
             {
                 return BadRequest("Requsted page must be greater than 0.");
             }
 
             var numberOfPosts = _context.Post.Count();
-            var pages = numberOfPosts / 10;
+            var pages = numberOfPosts / pageSize;
 
-            if (numberOfPosts % 10 != 0)
+            if (numberOfPosts % pageSize != 0)
             {
                 pages++;
             }
@@ -45,15 +50,14 @@ namespace TwittAPI.Controllers
                 return NotFound("The requested page does not exist.");
             }
 
-            var rowsToSkip = (page - 1) * 10;
-
+            var rowsToSkip = (page - 1) * pageSize;
             var posts = _context.Post
                 .Where(
                     x => _context.Post
                     .OrderBy(y => y.Id)
                     .Select(y => y.Id)
                     .Skip(rowsToSkip)
-                    .Take(10)
+                    .Take(pageSize)
                     .Contains(x.Id)
                 )
                 .ToList();

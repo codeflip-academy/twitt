@@ -2,7 +2,6 @@ C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\bin\D
 C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\bin\Debug\netcoreapp3.1\TwittAPI.exe
-C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\obj\Debug\netcoreapp3.1\TwittAPI.csprojAssemblyReference.cache
 C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\obj\Debug\netcoreapp3.1\TwittAPI.AssemblyInfoInputs.cache
 C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\obj\Debug\netcoreapp3.1\TwittAPI.AssemblyInfo.cs
 C:\Users\Trenton Hicks\Documents\CodeFlip\Projects\twitt\TwittAPI\TwittAPI\obj\Debug\netcoreapp3.1\TwittAPI.RazorTargetAssemblyInfo.cache
