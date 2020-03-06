@@ -61,21 +61,21 @@ namespace TwittAPI.Controllers
                     .Take(pageSize)
                     .Contains(x.Id)
                 )
+                .Include("Profile")
                 .ToList();
 
             var postList = new List<PostPresentation>();
 
             foreach(var post in posts)
             {
-                var profile = _context.Profile.Where(p => p.Id == post.ProfileId).First();
                 var commentCount = _context.CommentsCount.Where(c => c.PostId == post.Id).FirstOrDefault();
                 if(commentCount == null)
                 {
-                    postList.Add(new PostPresentation(post, 0, profile));
+                    postList.Add(new PostPresentation(post, 0));
                 }
                 else
                 {
-                    postList.Add( new PostPresentation(post, commentCount.CommentCount, profile) );
+                    postList.Add( new PostPresentation(post, commentCount.CommentCount) );
                 }
             }
 
