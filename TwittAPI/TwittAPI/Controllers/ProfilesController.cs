@@ -43,13 +43,38 @@ namespace TwittAPI.Controllers
         [HttpPost]
         public IActionResult CreateProfile([FromBody] Profile profile)
         {
-           
-            var InsertedData = _context.Profile.Add(profile);
-            if(InsertedData == null)
+            if (profile.Id <= 0)
             {
-                return NotFound("Profile not valid");
+                return BadRequest("Id didn't update correctly");
             }
-            return Ok(InsertedData);
+            else if (profile.FullName == null)
+            {
+                return BadRequest("No Full Name given");
+            }
+            else if (profile.UserName == null)
+            {
+                return BadRequest("No User Name Given");
+            }
+            else if (profile.Password == null)
+            {
+                return BadRequest("No password given");
+            }
+            else if (profile.Picture != null)
+            {
+                //store image in profile table
+            }
+            else if (profile != null)
+            {
+                profile.Status = ProfileState.Active;
+            }
+            
+            _context.Profile.Add(profile);
+            
+            _context.SaveChangesAsync();
+            
+            return CreatedAtAction("GetProfile", new { id = profile.Id }, profile);
         }
+        
+
     }
 }

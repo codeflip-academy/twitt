@@ -1,22 +1,23 @@
 using System;
 
-namespace twitt
+namespace TwittAPI
 {
     public static class ProfileState
     {
-        public static byte Active = 0;
-        public static byte Deleted = 1;
-
-        public static string ConvertToString(byte state)
+    
+        public static bool Active = true;
+        public static bool Deleted = false;
+        
+        public static string ConvertToString(bool state)
         {
             string stringValue;
-
+            
             switch (state)
             {
-                case 0:
+                case true:
                     stringValue = "Active";
                     break;
-                case 1:
+                case false:
                     stringValue = "Deleted";
                     break;
                 default:
@@ -26,5 +27,10 @@ namespace twitt
             return stringValue;
         }
     }
-
+    
 }
+
+
+
+
+
