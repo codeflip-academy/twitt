@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwittAPI.Models;
 using Microsoft.Extensions.Configuration;
+using SixLabors.ImageSharp;
+using System.IO;
+using SixLabors.ImageSharp.Formats;
 
 
 namespace TwittAPI.Controllers
@@ -36,6 +39,18 @@ namespace TwittAPI.Controllers
                 return NotFound();
             }
             return Ok(profile);
+        }
+
+        [HttpPost]
+        public IActionResult CreateProfile([FromBody] Profile profile)
+        {
+           
+            var InsertedData = _context.Profile.Add(profile);
+            if(InsertedData == null)
+            {
+                return NotFound("Profile not valid");
+            }
+            return Ok(InsertedData);
         }
     }
 }
