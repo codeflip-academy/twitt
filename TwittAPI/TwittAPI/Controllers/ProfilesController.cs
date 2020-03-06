@@ -26,11 +26,12 @@ namespace TwittAPI.Controllers
             _config = config;
         }
 
-       [HttpGet]
+        [HttpGet]
 
-       public IActionResult GetProfiles()
+        public IActionResult GetProfile()
         {
-            return Ok();
+            var profile = _context.Profile;
+            return Ok(profile);
         }
     }
 }
