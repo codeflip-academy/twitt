@@ -26,6 +26,11 @@ namespace TwittAPI.Controllers
             _config = config;
         }
 
-       
+       [HttpGet]
+
+       public IActionResult GetProfiles()
+        {
+            return Ok();
+        }
     }
 }
