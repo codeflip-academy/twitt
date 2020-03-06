@@ -31,7 +31,7 @@ namespace TwittAPI.Controllers
         [HttpGet]
         public IActionResult GetPosts([FromQuery] int page)
         {
-            var pageSize = Convert.ToInt32(_config.GetSection("Pagination")["PageSize"]);
+            var pageSize = Convert.ToInt32(_config.GetSection("Pagination")["PostPageSize"]);
 
             if (page < 1)
             {

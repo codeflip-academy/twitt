@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwittAPI.Models;
 using Microsoft.Extensions.Configuration;
-
+using TwittAPI.Presentation;
 
 namespace TwittAPI.Controllers
 {
@@ -26,90 +26,43 @@ namespace TwittAPI.Controllers
             _config = config;
         }
 
-        // GET: api/Comments
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetComment()
-        {
-            return await _context.Comment.ToListAsync();
-        }
-
-        // GET: api/Comments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Comment>> GetComment(int id)
+        public IActionResult GetPostComments(int id, [FromQuery] int page)
         {
-            var comment = await _context.Comment.FindAsync(id);
+            var pageSize = Convert.ToInt32(_config.GetSection("Pagination")["CommentPageSize"]);
 
-            if (comment == null)
+            if (page < 1)
             {
-                return NotFound();
+                return BadRequest("Requsted page must be greater than 0.");
             }
 
-            return comment;
-        }
+            var numberOfComments = _context.Comment.Count();
+            var pages = numberOfComments / pageSize;
 
-        // PUT: api/Comments/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutComment(int id, Comment comment)
-        {
-            if (id != comment.Id)
+            if (numberOfComments % pageSize != 0)
             {
-                return BadRequest();
+                pages++;
             }
 
-            _context.Entry(comment).State = EntityState.Modified;
-
-            try
+            if (page > pages)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CommentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound("The requested page does not exist.");
             }
 
-            return NoContent();
-        }
+            var rowsToSkip = (page - 1) * pageSize;
+            var comments = _context.Comment
+                .Where(
+                    x => _context.Comment
+                    .OrderBy(y => y.Id)
+                    .Select(y => y.Id)
+                    .Skip(rowsToSkip)
+                    .Take(pageSize)
+                    .Contains(x.Id) && x.PostId == id
+                )
+                .Include("Profile")
+                .ToList();
 
-        // POST: api/Comments
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<Comment>> PostComment(Comment comment)
-        {
-            _context.Comment.Add(comment);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetComment", new { id = comment.Id }, comment);
-        }
-
-        // DELETE: api/Comments/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Comment>> DeleteComment(int id)
-        {
-            var comment = await _context.Comment.FindAsync(id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            _context.Comment.Remove(comment);
-            await _context.SaveChangesAsync();
-
-            return comment;
-        }
-
-        private bool CommentExists(int id)
-        {
-            return _context.Comment.Any(e => e.Id == id);
+            return Ok(new CommentFeed(comments, page, pages));
         }
     }
 }
