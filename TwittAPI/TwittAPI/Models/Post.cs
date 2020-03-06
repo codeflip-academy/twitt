@@ -11,7 +11,6 @@ namespace TwittAPI.Models
             Comment = new HashSet<Comment>();
             Reaction = new HashSet<Reaction>();
         }
-
         public int Id { get; set; }
         public string Message { get; set; }
         public byte[] Picture { get; set; }

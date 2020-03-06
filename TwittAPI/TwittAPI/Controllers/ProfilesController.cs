@@ -26,6 +26,6 @@ namespace TwittAPI.Controllers
             _config = config;
         }
 
-       
+
     }
 }

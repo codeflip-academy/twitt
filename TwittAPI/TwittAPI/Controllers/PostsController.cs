@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using TwittAPI.Models;
+using TwittAPI.Presentation;
 
 namespace TwittAPI.Controllers
 {
@@ -19,7 +20,7 @@ namespace TwittAPI.Controllers
         private IConfiguration _config;
 
         private readonly TwittContext _context;
-        
+
         public PostsController(TwittContext context, IConfiguration config)
         {
             _context = context;
@@ -32,7 +33,7 @@ namespace TwittAPI.Controllers
         {
             var pageSize = Convert.ToInt32(_config.GetSection("Pagination")["PageSize"]);
 
-            if(page < 1)
+            if (page < 1)
             {
                 return BadRequest("Requsted page must be greater than 0.");
             }
@@ -45,7 +46,7 @@ namespace TwittAPI.Controllers
                 pages++;
             }
 
-            if(page > pages)
+            if (page > pages)
             {
                 return NotFound("The requested page does not exist.");
             }
@@ -62,8 +63,24 @@ namespace TwittAPI.Controllers
                 )
                 .ToList();
 
-            return Ok(new PostFeed(posts, page, pages));
+            var postList = new List<PostPresentation>();
+
+            foreach(var post in posts)
+            {
+                var profile = _context.Profile.Where(p => p.Id == post.ProfileId).First();
+                var commentCount = _context.CommentsCount.Where(c => c.PostId == post.Id).FirstOrDefault();
+                if(commentCount == null)
+                {
+                    postList.Add(new PostPresentation(post, 0, profile));
+                }
+                else
+                {
+                    postList.Add( new PostPresentation(post, commentCount.CommentCount, profile) );
+                }
+            }
+
+            return Ok(new PostFeed(postList, page, pages));
         }
-        
+
     }
 }

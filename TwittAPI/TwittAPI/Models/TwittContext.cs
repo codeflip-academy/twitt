@@ -16,6 +16,7 @@ namespace TwittAPI.Models
         }
 
         public virtual DbSet<Comment> Comment { get; set; }
+        public virtual DbSet<CommentsCount> CommentsCount { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<Profile> Profile { get; set; }
         public virtual DbSet<Reaction> Reaction { get; set; }
@@ -45,6 +46,15 @@ namespace TwittAPI.Models
                     .HasForeignKey(d => d.ProfileId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Comment__Profile__3C69FB99");
+            });
+
+            modelBuilder.Entity<CommentsCount>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("CommentsCount");
+
+                entity.Property(e => e.PostId).HasColumnName("PostID");
             });
 
             modelBuilder.Entity<Post>(entity =>
