@@ -63,10 +63,10 @@ namespace TwittAPI.Controllers
             {
                 profile.Status = ProfileState.Active;
             }
-            
+
             _context.Profile.Add(profile);
             _context.SaveChanges();
-            
+                        
             return Ok(profile);
         }
         
