@@ -64,5 +64,21 @@ namespace TwittAPI.Controllers
 
             return Ok(new CommentFeed(comments, page, pages));
         }
+
+        // POST: api/comments
+        [HttpPost]
+        public IActionResult PostComment([FromBody] Comment comment)
+        {
+            if (comment.Message.Length > 200)
+            {
+                return BadRequest("Comment must be 200 characters or less");
+            }
+
+            _context.Comment.Add(comment);
+
+            _context.SaveChanges();
+
+            return Ok(comment);
+        }
     }
 }
