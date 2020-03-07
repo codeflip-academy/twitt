@@ -43,11 +43,7 @@ namespace TwittAPI.Controllers
         [HttpPost]
         public IActionResult CreateProfile([FromBody] Profile profile)
         {
-            if (profile.Id <= 0)
-            {
-                return BadRequest("Id didn't update correctly");
-            }
-            else if (profile.FullName == null)
+            if (profile.FullName == null)
             {
                 return BadRequest("No Full Name given");
             }
@@ -69,10 +65,9 @@ namespace TwittAPI.Controllers
             }
             
             _context.Profile.Add(profile);
+            _context.SaveChanges();
             
-            _context.SaveChangesAsync();
-            
-            return CreatedAtAction("GetProfile", new { id = profile.Id }, profile);
+            return Ok(profile);
         }
         
 

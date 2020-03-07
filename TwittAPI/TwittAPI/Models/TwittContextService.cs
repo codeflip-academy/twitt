@@ -16,6 +16,5 @@ namespace TwittAPI.Models
 
         private IConfiguration _config;
         private readonly TwittContext _context;
-
     }
 }
