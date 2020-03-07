@@ -81,5 +81,23 @@ namespace TwittAPI.Controllers
 
             return Ok(new PostFeed(postList, page, pages));
         }
+
+        // POST: api/posts
+        [HttpPost]
+        public IActionResult PostMessage([FromBody] Post post)
+        {
+            if (post.Message.Length > 200)
+            {
+                return BadRequest("Message must be 200 characters or less");
+            }
+
+            _context.Post.Add(post);
+
+            //Check if an image exists, if one does use the ImageConverter
+
+            _context.SaveChanges();
+
+            return Ok(post);
+        }
     }
 }
