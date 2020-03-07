@@ -68,14 +68,16 @@ namespace TwittAPI.Controllers
 
             foreach(var post in posts)
             {
+                var likes = _context.Reaction.Where(l => l.State == true && l.Post == post.Id).Count();
+                var dislikes = _context.Reaction.Where(l => l.State == false && l.Post == post.Id).Count();
                 var commentCount = _context.CommentsCount.Where(c => c.PostId == post.Id).FirstOrDefault();
                 if(commentCount == null)
                 {
-                    postList.Add(new PostPresentation(post, 0));
+                    postList.Add(new PostPresentation(post, 0, likes, dislikes));
                 }
                 else
                 {
-                    postList.Add( new PostPresentation(post, commentCount.CommentCount) );
+                    postList.Add( new PostPresentation(post, commentCount.CommentCount, likes, dislikes) );
                 }
             }
 

@@ -27,9 +27,15 @@ namespace TwittAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Reaction()
+        public IActionResult Reaction(Reaction reaction)
         {
-            return Ok();
+            if(reaction.Profile != 0 && reaction.Post != 0)
+            {
+                _context.Reaction.Add(reaction);
+                _context.SaveChanges();
+                return Ok(reaction);
+            }
+            return BadRequest("Data is missing from the request.");
         }
     }
 }
