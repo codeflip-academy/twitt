@@ -31,7 +31,19 @@ namespace TwittAPI.Controllers
         {
             if(reaction.Profile != 0 && reaction.Post != 0)
             {
-                _context.Reaction.Add(reaction);
+                var userReactions = _context.Reaction
+                    .Where(r => r.Profile == reaction.Profile && r.Post == reaction.Post)
+                    .Count();
+
+                if(userReactions < 1)
+                {
+                    _context.Reaction.Add(reaction);
+                }
+                else
+                {
+                    return BadRequest("User already reacted to this post.");
+                }
+
                 _context.SaveChanges();
                 return Ok(reaction);
             }
