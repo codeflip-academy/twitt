@@ -8,13 +8,13 @@ namespace TwittAPI.Presentation
 {
     public class CommentFeed
     {
-        public CommentFeed(List<Comment> comments, int page, int pages)
+        public CommentFeed(List<CommentPresentation> comments, int page, int pages)
         {
-            Comments = new List<Comment>(comments);
+            Comments = new List<CommentPresentation>(comments);
             Page = page;
             Pages = pages;
         }
-        public List<Comment> Comments { get; set; }
+        public List<CommentPresentation> Comments { get; set; }
         public int Page { get; set; }
         public int Pages { get; set; }
     }

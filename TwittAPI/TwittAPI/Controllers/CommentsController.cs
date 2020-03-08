@@ -62,7 +62,15 @@ namespace TwittAPI.Controllers
                 .Include("Profile")
                 .ToList();
 
-            return Ok(new CommentFeed(comments, page, pages));
+            var commentList = new List<CommentPresentation>();
+
+            foreach(var comment in comments)
+            {
+                var commentPresentation = new CommentPresentation(comment.Message, comment.Profile);
+                commentList.Add(commentPresentation);
+            }
+
+            return Ok(new CommentFeed(commentList, page, pages));
         }
 
         // POST: api/comments
