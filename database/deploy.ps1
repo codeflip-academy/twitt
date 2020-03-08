@@ -4,3 +4,4 @@ Invoke-Sqlcmd -InputFile Profile.sql
 Invoke-Sqlcmd -InputFile Post.sql
 Invoke-Sqlcmd -InputFile Comment.sql
 Invoke-Sqlcmd -InputFile Reaction.sql
+Invoke-Sqlcmd -InputFile CommentsCount.sql
