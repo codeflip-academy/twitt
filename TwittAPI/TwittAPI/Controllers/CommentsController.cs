@@ -36,7 +36,9 @@ namespace TwittAPI.Controllers
                 return BadRequest("Requsted page must be greater than 0.");
             }
 
-            var numberOfComments = _context.Comment.Count();
+            var commentCount = _context.CommentsCount.Where(c => c.PostId == id).FirstOrDefault();
+            int numberOfComments = commentCount.CommentCount != null ? (int)commentCount.CommentCount : 0;
+
             var pages = numberOfComments / pageSize;
 
             if (numberOfComments % pageSize != 0)
@@ -66,7 +68,7 @@ namespace TwittAPI.Controllers
 
             foreach(var comment in comments)
             {
-                var commentPresentation = new CommentPresentation(comment.Message, comment.Profile);
+                var commentPresentation = new CommentPresentation(comment.Id, comment.Message, comment.Profile);
                 commentList.Add(commentPresentation);
             }
 

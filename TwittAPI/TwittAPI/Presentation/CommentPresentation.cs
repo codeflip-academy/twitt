@@ -8,11 +8,13 @@ namespace TwittAPI.Presentation
 {
     public class CommentPresentation
     {
-        public CommentPresentation(string message, Profile profile)
+        public CommentPresentation(int id, string message, Profile profile)
         {
+            ID = id;
             Message = message;
             Profile = new PostProfilePresentation(profile.FullName, profile.UserName, profile.Picture);
         }
+        public int ID { get; set; }
         public string Message { get; set; }
         public PostProfilePresentation Profile { get; set; }
 

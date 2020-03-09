@@ -11,6 +11,7 @@ namespace TwittAPI.Presentation
     {
         public PostPresentation(Post post, int? commentCount, int likes, int dislikes)
         {
+            ID = post.Id;
             Message = post.Message;
             Picture = post.Picture;
             Profile = new PostProfilePresentation(post.Profile.FullName, post.Profile.UserName, post.Profile.Picture);
@@ -18,6 +19,7 @@ namespace TwittAPI.Presentation
             Dislikes = dislikes;
             NumberOfComments = commentCount;
         }
+        public int ID { get; set; }
         public string Message { get; set; }
         public byte[] Picture { get; set; }
         public PostProfilePresentation Profile { get; set; }

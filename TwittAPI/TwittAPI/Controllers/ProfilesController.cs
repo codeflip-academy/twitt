@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using System.IO;
 using SixLabors.ImageSharp.Formats;
-
+using System.Data.Entity;
 
 namespace TwittAPI.Controllers
 {
@@ -33,7 +33,7 @@ namespace TwittAPI.Controllers
         public IActionResult GetProfile(int id)
         {
             var profile = _context.Profile.Find(id);
-            if(profile == null)
+            if (profile == null)
             {
                 return NotFound();
             }
@@ -66,10 +66,30 @@ namespace TwittAPI.Controllers
 
             _context.Profile.Add(profile);
             _context.SaveChanges();
-                        
+
             return Ok(profile);
         }
-        
 
+        [HttpDelete("{id}")]
+        public IActionResult DeactivateProfile(int id)
+        {
+            using(var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var profile = _context.Profile.Find(id);
+                    profile.Status = false;
+                    _context.Profile.Update(profile);
+                    _context.SaveChanges();
+                    transaction.Commit();
+                    return Ok(profile);
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    return BadRequest(e.Message);
+                }
+            }
+        }
     }
 }
