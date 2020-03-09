@@ -79,6 +79,15 @@ namespace TwittAPI.Controllers
             
             _context.SaveChanges();
 
+            if (profile.Picture != null)
+            {
+                var image = new ImageConverter(connectionString: _config.GetConnectionString("TwittDatabase"));
+
+                var imageDownload = image.DownloadImageFromUrl(profile.Picture);
+
+                image.StoreImageInProfile(imageDownload, p);
+            }
+
             return Ok(profile);
         }
 
