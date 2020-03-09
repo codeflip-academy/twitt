@@ -1,4 +1,4 @@
-Invoke-Sqlcmd -InputFile DropDatabase.sql
+Invoke-Sqlcmd -InputFile DropDB.sql
 Invoke-Sqlcmd -InputFile Twitt.sql
 Invoke-Sqlcmd -InputFile Profile.sql
 Invoke-Sqlcmd -InputFile Post.sql
