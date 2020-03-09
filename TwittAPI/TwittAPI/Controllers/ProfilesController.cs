@@ -10,7 +10,8 @@ using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using System.IO;
 using SixLabors.ImageSharp.Formats;
-using System.Data.Entity;
+using System.Net;
+using System.Security.Policy;
 
 namespace TwittAPI.Controllers
 {
@@ -18,17 +19,17 @@ namespace TwittAPI.Controllers
     [ApiController]
     public class ProfilesController : ControllerBase
     {
-
+        
         private IConfiguration _config;
-
+        
         private readonly TwittContext _context;
-
+        
         public ProfilesController(TwittContext context, IConfiguration config)
         {
             _context = context;
             _config = config;
         }
-
+        
         [HttpGet("{id}")]
         public IActionResult GetProfile(int id)
         {
@@ -39,32 +40,43 @@ namespace TwittAPI.Controllers
             }
             return Ok(profile);
         }
-
+        
         [HttpPost]
-        public IActionResult CreateProfile([FromBody] Profile profile)
+        public IActionResult CreateProfile([FromBody] ProfilePost profile)
         {
+            var p = new Profile();
+            
             if (profile.FullName == null)
             {
                 return BadRequest("No Full Name given");
             }
+            
             else if (profile.UserName == null)
             {
-                return BadRequest("No User Name Given");
+                var usernameExists = _context.Profile.Where(x => x.UserName == profile.UserName).FirstOrDefault() != null;
+                
+                
+                if (usernameExists)
+                {
+                    return BadRequest("Username already exists.");
+                }
             }
             else if (profile.Password == null)
             {
                 return BadRequest("No password given");
             }
-            else if (profile.Picture != null)
-            {
-                //store image in profile table
-            }
+
             else if (profile != null)
             {
                 profile.Status = ProfileState.Active;
             }
-
-            _context.Profile.Add(profile);
+            
+            p.FullName = profile.FullName;
+            p.UserName = profile.UserName;
+            p.Password = profile.Password;
+            p.Status = profile.Status;
+            _context.Profile.Add(p);
+            
             _context.SaveChanges();
 
             return Ok(profile);
@@ -91,5 +103,6 @@ namespace TwittAPI.Controllers
                 }
             }
         }
+            
     }
 }
