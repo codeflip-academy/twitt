@@ -102,6 +102,28 @@ namespace TwittAPI
 
         }
 
+        public void GetImageFromPost(Post post)
+        {
+            var id = post.Id;
+
+            byte[] byteArray;
+
+            Connection.Open();
+
+            using (var command = Connection.CreateCommand())
+            {
+                command.CommandText = @"SELECT Picture FROM Post WHERE ID = @id";
+                command.Parameters.AddWithValue("@id", id);
+                byteArray = (byte[])command.ExecuteScalar();
+                ConvertByteArrayToImage(byteArray);
+
+
+            }
+
+            Connection.Close();
+
+        }
+
         public void StoreImageInProfile(Image image, Profile profile)
         {
             var id = profile.Id;
@@ -138,7 +160,44 @@ namespace TwittAPI
             Connection.Close();
 
         }
-        
+
+        public void StoreImageInPost(Image image, Post post)
+        {
+            var id = post.Id;
+
+
+
+            Connection.Open();
+
+            using (var command = Connection.CreateCommand())
+            {
+
+                using (var stream = new MemoryStream())
+                {
+                    var encoder = new JpegEncoder()
+                    {
+                        Quality = 40,
+                    };
+                    image.Save(stream, encoder);
+
+                    var pic = ConvertImageToByteArray(image, encoder);
+
+                    command.CommandText = @"Update Post SET Picture = @pic WHERE ID = @id";
+
+                    command.Parameters.AddWithValue(@"pic", pic);
+
+                    command.Parameters.AddWithValue(@"id", id);
+
+                    command.ExecuteNonQuery();
+
+                }
+
+            }
+
+            Connection.Close();
+
+        }
+
     }
     
     
