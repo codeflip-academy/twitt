@@ -90,5 +90,17 @@ namespace TwittAPI.Controllers
 
             return Ok(comment);
         }
+
+        // DELETE: api/comments
+        [HttpDelete("{id}")]
+        public IActionResult DeleteComment(int id)
+        {
+            var twittCS = new TwittContextService(_config, _context);
+            if (twittCS.DeleteComment(id))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

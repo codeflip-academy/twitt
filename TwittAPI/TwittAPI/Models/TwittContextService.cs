@@ -16,5 +16,19 @@ namespace TwittAPI.Models
 
         private IConfiguration _config;
         private readonly TwittContext _context;
+
+        public bool DeleteComment(int id)
+        {
+            //Logic to delete a comment by id
+            var comment = _context.Comment.Where(c => c.Id == id).FirstOrDefault();
+
+            if (comment == null)
+            {
+                return false;
+            }
+            _context.Remove(comment);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }
