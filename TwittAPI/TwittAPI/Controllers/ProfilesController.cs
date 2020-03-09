@@ -38,6 +38,12 @@ namespace TwittAPI.Controllers
             {
                 return NotFound();
             }
+            else if(profile.Picture != null)
+            {
+                var image = new ImageConverter(connectionString: _config.GetConnectionString("TwittDatabase"));
+
+                image.GetImageFromProfile(profile);
+            }
             return Ok(profile);
         }
         

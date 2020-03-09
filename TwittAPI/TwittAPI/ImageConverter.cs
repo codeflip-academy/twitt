@@ -74,10 +74,34 @@ namespace TwittAPI
         {
             using (MemoryStream ms = new MemoryStream(byteArrayIn))
             {
-                return Image.Load(ms);
+                var image = Image.Load(ms);
+
+                return image;
             }
         }
-        
+
+        public void GetImageFromProfile(Profile profile)
+        {
+            var id = profile.Id;
+
+            byte[] byteArray;
+
+            Connection.Open();
+
+            using(var command = Connection.CreateCommand())
+            {
+                command.CommandText = @"SELECT Picture FROM Profile WHERE ID = @id";
+                command.Parameters.AddWithValue("@id", id);
+                byteArray = (byte[])command.ExecuteScalar();
+                ConvertByteArrayToImage(byteArray);
+
+
+            }
+
+            Connection.Close();
+
+        }
+
         public void StoreImageInProfile(Image image, Profile profile)
         {
             var id = profile.Id;
@@ -108,9 +132,6 @@ namespace TwittAPI
                     command.ExecuteNonQuery();
                     
                 }
-                
-                
-                
                 
             }
 
