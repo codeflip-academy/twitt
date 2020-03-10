@@ -23,8 +23,57 @@ namespace TwittAPI
         public SqlConnection Connection { get; set; }
         
         // This method converts an image to an array of bytes.
-        
-        
+
+        public byte[] ConvertStringToByteArray(string image)
+        {
+            byte[] imageBytes = Convert.FromBase64String(image);
+
+            return imageBytes;
+        }
+
+        public void StoreImageProfile(ProfilePost profile)
+        {
+            var id = profile.Id;
+
+            var s = profile.Picture;
+
+            Connection.Open();
+
+            using(var command = Connection.CreateCommand())
+            {
+                var pic = ConvertStringToByteArray(s);
+                command.CommandText = @"Update Profile SET Picture = @pic WHERE ID = @id";
+
+                command.Parameters.AddWithValue(@"pic", pic);
+
+                command.Parameters.AddWithValue(@"id", id);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void StoreImagePost(ProfilePost profile)
+        {
+            var id = profile.Id;
+
+            var s = profile.Picture;
+
+            Connection.Open();
+
+            using (var command = Connection.CreateCommand())
+            {
+                var pic = ConvertStringToByteArray(s);
+                command.CommandText = @"Update Post SET Picture = @pic WHERE ID = @id";
+
+                command.Parameters.AddWithValue(@"pic", pic);
+
+                command.Parameters.AddWithValue(@"id", id);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+
         public Image DownloadImageFromUrl(string imageUrl)
         {
             Image image = null;
@@ -51,6 +100,8 @@ namespace TwittAPI
             
             return image;
         }
+
+      
         public byte[] ConvertImageToByteArray(Image imageToConvert, IImageEncoder encoder)
         {
             byte[] array;
@@ -74,7 +125,7 @@ namespace TwittAPI
         {
             using (MemoryStream ms = new MemoryStream(byteArrayIn))
             {
-                var image = Image.Load(ms);
+               var image = Image.Load(ms);
 
                 return image;
             }
@@ -123,6 +174,8 @@ namespace TwittAPI
             Connection.Close();
 
         }
+
+        
 
         public void StoreImageInProfile(Image image, Profile profile)
         {
