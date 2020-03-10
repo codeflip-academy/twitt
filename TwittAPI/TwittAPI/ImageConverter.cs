@@ -13,8 +13,6 @@ namespace TwittAPI
 {
     public class ImageConverter : object
     {
-        public Stream InputStream { get; }
-        public Stream OutputStream { get; }
         
         public ImageConverter(string connectionString)
         {
@@ -22,8 +20,6 @@ namespace TwittAPI
         }
         public SqlConnection Connection { get; set; }
         
-        // This method converts an image to an array of bytes.
-
         public byte[] ConvertStringToByteArray(string image)
         {
             byte[] imageBytes = Convert.FromBase64String(image);
@@ -52,11 +48,11 @@ namespace TwittAPI
             }
         }
 
-        public void StoreImagePost(ProfilePost profile)
+        public void StoreImagePost(PostModels post)
         {
-            var id = profile.Id;
+            var id = post.Id;
 
-            var s = profile.Picture;
+            var s = post.Picture;
 
             Connection.Open();
 
@@ -73,6 +69,70 @@ namespace TwittAPI
             }
         }
 
+
+        public Image ConvertByteArrayToImage(byte[] byteArrayIn)
+        {
+            using (MemoryStream ms = new MemoryStream(byteArrayIn))
+            {
+                var image = Image.Load(ms);
+
+                return image;
+            }
+        }
+
+        public void GetImageFromProfile(Profile profile)
+        {
+            var id = profile.Id;
+
+            byte[] byteArray;
+
+            Connection.Open();
+
+            using (var command = Connection.CreateCommand())
+            {
+                command.CommandText = @"SELECT Picture FROM Profile WHERE ID = @id";
+                command.Parameters.AddWithValue("@id", id);
+                byteArray = (byte[])command.ExecuteScalar();
+                ConvertByteArrayToImage(byteArray);
+
+
+            }
+
+            Connection.Close();
+
+        }
+
+        public void GetImageFromPost(Post post)
+        {
+            var id = post.Id;
+
+            byte[] byteArray;
+
+            Connection.Open();
+
+            using (var command = Connection.CreateCommand())
+            {
+                command.CommandText = @"SELECT Picture FROM Post WHERE ID = @id";
+                command.Parameters.AddWithValue("@id", id);
+                byteArray = (byte[])command.ExecuteScalar();
+                ConvertByteArrayToImage(byteArray);
+
+
+            }
+
+            Connection.Close();
+
+        }
+
+
+
+
+
+
+        //
+        //
+        //
+        //These Methods are not currently being used, but can be used to store a specific url if needed.
 
         public Image DownloadImageFromUrl(string imageUrl)
         {
@@ -121,60 +181,7 @@ namespace TwittAPI
             return array;
         }
         
-        public Image ConvertByteArrayToImage(byte[] byteArrayIn)
-        {
-            using (MemoryStream ms = new MemoryStream(byteArrayIn))
-            {
-               var image = Image.Load(ms);
-
-                return image;
-            }
-        }
-
-        public void GetImageFromProfile(Profile profile)
-        {
-            var id = profile.Id;
-
-            byte[] byteArray;
-
-            Connection.Open();
-
-            using(var command = Connection.CreateCommand())
-            {
-                command.CommandText = @"SELECT Picture FROM Profile WHERE ID = @id";
-                command.Parameters.AddWithValue("@id", id);
-                byteArray = (byte[])command.ExecuteScalar();
-                ConvertByteArrayToImage(byteArray);
-
-
-            }
-
-            Connection.Close();
-
-        }
-
-        public void GetImageFromPost(Post post)
-        {
-            var id = post.Id;
-
-            byte[] byteArray;
-
-            Connection.Open();
-
-            using (var command = Connection.CreateCommand())
-            {
-                command.CommandText = @"SELECT Picture FROM Post WHERE ID = @id";
-                command.Parameters.AddWithValue("@id", id);
-                byteArray = (byte[])command.ExecuteScalar();
-                ConvertByteArrayToImage(byteArray);
-
-
-            }
-
-            Connection.Close();
-
-        }
-
+       
         
 
         public void StoreImageInProfile(Image image, Profile profile)
