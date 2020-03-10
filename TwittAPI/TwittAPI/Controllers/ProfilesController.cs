@@ -38,6 +38,12 @@ namespace TwittAPI.Controllers
             {
                 return NotFound();
             }
+            else if(profile.Picture != null)
+            {
+                var image = new ImageConverter(connectionString: _config.GetConnectionString("TwittDatabase"));
+
+                image.GetImageFromProfile(profile);
+            }
             return Ok(profile);
         }
         
@@ -79,14 +85,16 @@ namespace TwittAPI.Controllers
             
             _context.SaveChanges();
 
+            profile.Id = p.Id;
+
             if (profile.Picture != null)
             {
                 var image = new ImageConverter(connectionString: _config.GetConnectionString("TwittDatabase"));
 
-                var imageDownload = image.DownloadImageFromUrl(profile.Picture);
-
-                image.StoreImageInProfile(imageDownload, p);
+                image.StoreImageProfile(profile);
             }
+
+           
 
             return Ok(profile);
         }

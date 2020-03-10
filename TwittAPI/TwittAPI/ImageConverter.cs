@@ -23,8 +23,57 @@ namespace TwittAPI
         public SqlConnection Connection { get; set; }
         
         // This method converts an image to an array of bytes.
-        
-        
+
+        public byte[] ConvertStringToByteArray(string image)
+        {
+            byte[] imageBytes = Convert.FromBase64String(image);
+
+            return imageBytes;
+        }
+
+        public void StoreImageProfile(ProfilePost profile)
+        {
+            var id = profile.Id;
+
+            var s = profile.Picture;
+
+            Connection.Open();
+
+            using(var command = Connection.CreateCommand())
+            {
+                var pic = ConvertStringToByteArray(s);
+                command.CommandText = @"Update Profile SET Picture = @pic WHERE ID = @id";
+
+                command.Parameters.AddWithValue(@"pic", pic);
+
+                command.Parameters.AddWithValue(@"id", id);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void StoreImagePost(ProfilePost profile)
+        {
+            var id = profile.Id;
+
+            var s = profile.Picture;
+
+            Connection.Open();
+
+            using (var command = Connection.CreateCommand())
+            {
+                var pic = ConvertStringToByteArray(s);
+                command.CommandText = @"Update Post SET Picture = @pic WHERE ID = @id";
+
+                command.Parameters.AddWithValue(@"pic", pic);
+
+                command.Parameters.AddWithValue(@"id", id);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+
         public Image DownloadImageFromUrl(string imageUrl)
         {
             Image image = null;
@@ -51,6 +100,8 @@ namespace TwittAPI
             
             return image;
         }
+
+      
         public byte[] ConvertImageToByteArray(Image imageToConvert, IImageEncoder encoder)
         {
             byte[] array;
@@ -74,10 +125,58 @@ namespace TwittAPI
         {
             using (MemoryStream ms = new MemoryStream(byteArrayIn))
             {
-                return Image.Load(ms);
+               var image = Image.Load(ms);
+
+                return image;
             }
         }
+
+        public void GetImageFromProfile(Profile profile)
+        {
+            var id = profile.Id;
+
+            byte[] byteArray;
+
+            Connection.Open();
+
+            using(var command = Connection.CreateCommand())
+            {
+                command.CommandText = @"SELECT Picture FROM Profile WHERE ID = @id";
+                command.Parameters.AddWithValue("@id", id);
+                byteArray = (byte[])command.ExecuteScalar();
+                ConvertByteArrayToImage(byteArray);
+
+
+            }
+
+            Connection.Close();
+
+        }
+
+        public void GetImageFromPost(Post post)
+        {
+            var id = post.Id;
+
+            byte[] byteArray;
+
+            Connection.Open();
+
+            using (var command = Connection.CreateCommand())
+            {
+                command.CommandText = @"SELECT Picture FROM Post WHERE ID = @id";
+                command.Parameters.AddWithValue("@id", id);
+                byteArray = (byte[])command.ExecuteScalar();
+                ConvertByteArrayToImage(byteArray);
+
+
+            }
+
+            Connection.Close();
+
+        }
+
         
+
         public void StoreImageInProfile(Image image, Profile profile)
         {
             var id = profile.Id;
@@ -113,7 +212,44 @@ namespace TwittAPI
             Connection.Close();
 
         }
-        
+
+        public void StoreImageInPost(Image image, Post post)
+        {
+            var id = post.Id;
+
+
+
+            Connection.Open();
+
+            using (var command = Connection.CreateCommand())
+            {
+
+                using (var stream = new MemoryStream())
+                {
+                    var encoder = new JpegEncoder()
+                    {
+                        Quality = 40,
+                    };
+                    image.Save(stream, encoder);
+
+                    var pic = ConvertImageToByteArray(image, encoder);
+
+                    command.CommandText = @"Update Post SET Picture = @pic WHERE ID = @id";
+
+                    command.Parameters.AddWithValue(@"pic", pic);
+
+                    command.Parameters.AddWithValue(@"id", id);
+
+                    command.ExecuteNonQuery();
+
+                }
+
+            }
+
+            Connection.Close();
+
+        }
+
     }
     
     

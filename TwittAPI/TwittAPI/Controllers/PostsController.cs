@@ -81,6 +81,8 @@ namespace TwittAPI.Controllers
                 }
             }
 
+          
+
             return Ok(new PostFeed(postList, page, pages));
         }
 
@@ -100,6 +102,19 @@ namespace TwittAPI.Controllers
             _context.SaveChanges();
 
             return Ok(post);
+        }
+
+        // DELETE: api/posts
+        [HttpDelete("{id}")]
+        public IActionResult DeleteMessage(int id)
+        {
+            var twittCS = new TwittContextService(_config, _context);
+
+            if (twittCS.DeleteMessage(id))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }
