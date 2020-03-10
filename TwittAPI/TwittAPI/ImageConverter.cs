@@ -101,17 +101,13 @@ namespace TwittAPI
                     
                     command.CommandText = @"Update Profile SET Picture = @pic WHERE ID = @id";
                     
-                    command.Parameters.AddWithValue(@"pic", pic);
+                    command.Parameters.AddWithValue("@pic", pic);
                     
-                    command.Parameters.AddWithValue(@"id", id);
+                    command.Parameters.AddWithValue("@id", id);
                     
                     command.ExecuteNonQuery();
                     
                 }
-                
-                
-                
-                
             }
 
             Connection.Close();

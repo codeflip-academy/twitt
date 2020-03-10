@@ -8,7 +8,7 @@ CREATE TABLE [Profile]
     [FullName] VARCHAR(50) NOT NULL,
     [UserName] VARCHAR(50) UNIQUE NOT NULL,
     [Password] VARCHAR(16) NOT NULL,
-    [Picture] VARBINARY NULL,
+    [Picture] VARBINARY(MAX) NULL,
 	[Description] VARCHAR(200) NULL,
 	[Status] BIT NOT NULL,
 )
