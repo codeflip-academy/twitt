@@ -17,6 +17,20 @@ namespace TwittAPI.Models
         private IConfiguration _config;
         private readonly TwittContext _context;
 
+        public bool DeleteReaction(int id)
+        {
+            //Logic to delete a comment by id
+            var reaction = _context.Reaction.Where(c => c.Id == id).FirstOrDefault();
+
+            if (reaction == null)
+            {
+                return false;
+            }
+            _context.Remove(reaction);
+            _context.SaveChanges();
+            return true;
+        }
+
         public bool DeleteComment(int id)
         {
             //Logic to delete a comment by id
@@ -35,17 +49,17 @@ namespace TwittAPI.Models
         {
             //DeleteReactions();
 
-            //Get all the reactions on a message/post ID
-            //var reactions = _context.Reaction.Where(c => c.Post == id);
+            //Get all the reactions on a message / post ID
+              var reactions = _context.Reaction.Where(c => c.Post == id);
 
             //Loop through the reactions connected to the messageID and delete them
-            //if (reactions != null)
-            //{
-            //    foreach (var reaction in reactions)
-            //    {
-            //        _context.Remove(reaction);
-            //    }
-            //}
+            if (reactions != null)
+            {
+                foreach (var reaction in reactions)
+                {
+                    _context.Remove(reaction);
+                }
+            }
 
             //Get all the comments on message/post ID
             var comments = _context.Comment.Where(c => c.PostId == id);

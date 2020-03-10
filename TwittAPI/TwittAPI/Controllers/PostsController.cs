@@ -102,7 +102,7 @@ namespace TwittAPI.Controllers
             return Ok(post);
         }
 
-        // DELETE: api/posts
+        // DELETE: api/posts/id
         [HttpDelete("{id}")]
         public IActionResult DeleteMessage(int id)
         {
