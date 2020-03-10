@@ -13,8 +13,6 @@ namespace TwittAPI
 {
     public class ImageConverter : object
     {
-        public Stream InputStream { get; }
-        public Stream OutputStream { get; }
         
         public ImageConverter(string connectionString)
         {
@@ -22,54 +20,56 @@ namespace TwittAPI
         }
         public SqlConnection Connection { get; set; }
         
-        // This method converts an image to an array of bytes.
-        
-        
-        public Image DownloadImageFromUrl(string imageUrl)
+        public byte[] ConvertStringToByteArray(string image)
         {
-            Image image = null;
-            
-            try
-            {
-                System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(imageUrl);
-                webRequest.AllowWriteStreamBuffering = true;
-                webRequest.Timeout = 30000;
-                
-                System.Net.WebResponse webResponse = webRequest.GetResponse();
-                
-                Stream stream = webResponse.GetResponseStream();
-                
-                IImageFormat format;
-                image = Image.Load(stream, out format);
-                
-                webResponse.Close();
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-            
-            return image;
+            byte[] imageBytes = Convert.FromBase64String(image);
+
+            return imageBytes;
         }
-        public byte[] ConvertImageToByteArray(Image imageToConvert, IImageEncoder encoder)
+
+        public void StoreImageProfile(ProfilePost profile)
         {
-            byte[] array;
-            
-            try
+            var id = profile.Id;
+
+            var s = profile.Picture;
+
+            Connection.Open();
+
+            using(var command = Connection.CreateCommand())
             {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    imageToConvert.Save(ms, encoder);
-                    array = ms.ToArray();
-                }
+                var pic = ConvertStringToByteArray(s);
+                command.CommandText = @"Update Profile SET Picture = @pic WHERE ID = @id";
+
+                command.Parameters.AddWithValue(@"pic", pic);
+
+                command.Parameters.AddWithValue(@"id", id);
+
+                command.ExecuteNonQuery();
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            return array;
         }
-        
+
+        public void StoreImagePost(PostModels post)
+        {
+            var id = post.Id;
+
+            var s = post.Picture;
+
+            Connection.Open();
+
+            using (var command = Connection.CreateCommand())
+            {
+                var pic = ConvertStringToByteArray(s);
+                command.CommandText = @"Update Post SET Picture = @pic WHERE ID = @id";
+
+                command.Parameters.AddWithValue(@"pic", pic);
+
+                command.Parameters.AddWithValue(@"id", id);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+
         public Image ConvertByteArrayToImage(byte[] byteArrayIn)
         {
             using (MemoryStream ms = new MemoryStream(byteArrayIn))
@@ -88,7 +88,7 @@ namespace TwittAPI
 
             Connection.Open();
 
-            using(var command = Connection.CreateCommand())
+            using (var command = Connection.CreateCommand())
             {
                 command.CommandText = @"SELECT Picture FROM Profile WHERE ID = @id";
                 command.Parameters.AddWithValue("@id", id);
@@ -124,6 +124,66 @@ namespace TwittAPI
 
         }
 
+
+
+
+
+
+        //
+        //
+        //
+        //These Methods are not currently being used, but can be used to store a specific url if needed.
+
+        public Image DownloadImageFromUrl(string imageUrl)
+        {
+            Image image = null;
+            
+            try
+            {
+                System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(imageUrl);
+                webRequest.AllowWriteStreamBuffering = true;
+                webRequest.Timeout = 30000;
+                
+                System.Net.WebResponse webResponse = webRequest.GetResponse();
+                
+                Stream stream = webResponse.GetResponseStream();
+                
+                IImageFormat format;
+                image = Image.Load(stream, out format);
+                
+                webResponse.Close();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            
+            return image;
+        }
+
+      
+        public byte[] ConvertImageToByteArray(Image imageToConvert, IImageEncoder encoder)
+        {
+            byte[] array;
+            
+            try
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    imageToConvert.Save(ms, encoder);
+                    array = ms.ToArray();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return array;
+        }
+        
+       
+        
+
         public void StoreImageInProfile(Image image, Profile profile)
         {
             var id = profile.Id;
@@ -147,14 +207,13 @@ namespace TwittAPI
                     
                     command.CommandText = @"Update Profile SET Picture = @pic WHERE ID = @id";
                     
-                    command.Parameters.AddWithValue(@"pic", pic);
+                    command.Parameters.AddWithValue("@pic", pic);
                     
-                    command.Parameters.AddWithValue(@"id", id);
+                    command.Parameters.AddWithValue("@id", id);
                     
                     command.ExecuteNonQuery();
                     
                 }
-                
             }
 
             Connection.Close();
