@@ -68,8 +68,10 @@ namespace TwittAPI.Controllers
 
             foreach(var post in posts)
             {
-                var likes = _context.Reaction.Where(l => l.State == true && l.Post == post.Id).Count();
-                var dislikes = _context.Reaction.Where(l => l.State == false && l.Post == post.Id).Count();
+                var like = Reactions.Like;
+                var disLike = Reactions.DisLike;
+                var likes = _context.Reaction.Where(l => l.Response == true && l.Post == post.Id).Count();
+                var dislikes = _context.Reaction.Where(l => l.Response == false && l.Post == post.Id).Count();
                 var commentCount = _context.CommentsCount.Where(c => c.PostId == post.Id).FirstOrDefault();
                 if(commentCount == null)
                 {

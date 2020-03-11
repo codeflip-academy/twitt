@@ -1,22 +1,22 @@
 using System;
 
-namespace twit
+namespace TwittAPI
 {
-    public static class Reaction
+    public static class Reactions
     {
-        public static byte Like = 0;
-        public static byte DisLike = 1;
+        public static bool Like = true;
+        public static bool DisLike = false;
 
-        public static string ConvertToString(byte state)
+        public static string ConvertToString(bool state)
         {
             var stringValue = "";
 
             switch(state)
             {
-                case 0:
+                case true:
                     stringValue = "Liked";
                     break;
-                case 1:
+                case false:
                     stringValue = "DisLiked";
                     break;
                 default:
