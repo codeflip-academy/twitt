@@ -37,7 +37,7 @@ namespace TwittAPI.Controllers
 
             if (profile == null)
             {
-                return NotFound();
+                return NotFound("Profile doesn't exist. :(");
             }
             else if(profile.Picture != null)
             {
