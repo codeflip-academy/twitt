@@ -26,7 +26,7 @@ namespace TwittAPI
             return imageBytes;
         }
 
-        public void StoreImageProfile(ProfilePost profile)
+        public void StoreImageProfile(ProfileModels profile)
         {
             var id = profile.Id;
             var s = profile.Picture;
@@ -49,7 +49,7 @@ namespace TwittAPI
             }
         }
 
-        public void StoreImagePost(PostModels post)
+        public void StoreImagePost(TwittModels post)
         {
             var id = post.Id;
             var s = post.Picture;
@@ -102,7 +102,7 @@ namespace TwittAPI
             }
         }
 
-        public void GetImageFromPost(Post post)
+        public void GetImageFromPost(Twitt post)
         {
             var id = post.Id;
             byte[] byteArray;

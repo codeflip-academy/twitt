@@ -9,7 +9,7 @@ namespace TwittAPI.Models
         public bool State { get; set; }
         public int Profile { get; set; }
         public int Post { get; set; }
-        public virtual Post PostNavigation { get; set; }
+        public virtual Twitt PostNavigation { get; set; }
         public virtual Profile ProfileNavigation { get; set; }
     }
 }

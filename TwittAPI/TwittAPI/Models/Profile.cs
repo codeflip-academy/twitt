@@ -9,7 +9,7 @@ namespace TwittAPI.Models
         public Profile()
         {
             Comment = new HashSet<Comment>();
-            Post = new HashSet<Post>();
+            Post = new HashSet<Twitt>();
             Reaction = new HashSet<Reaction>();
         }
         public int Id { get; set; }
@@ -20,7 +20,7 @@ namespace TwittAPI.Models
         public string Description { get; set; }
         public bool Status { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
-        public virtual ICollection<Post> Post { get; set; }
+        public virtual ICollection<Twitt> Post { get; set; }
         public virtual ICollection<Reaction> Reaction { get; set; }
     }
 }

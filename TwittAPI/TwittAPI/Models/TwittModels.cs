@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TwittAPI.Models
 {
-    public class PostModels
+    public class TwittModels
     {
         public int Id { get; set; }
         public string Message { get; set; }

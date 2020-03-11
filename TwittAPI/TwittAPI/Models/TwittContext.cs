@@ -17,7 +17,7 @@ namespace TwittAPI.Models
 
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<CommentsCount> CommentsCount { get; set; }
-        public virtual DbSet<Post> Post { get; set; }
+        public virtual DbSet<Twitt> Post { get; set; }
         public virtual DbSet<Profile> Profile { get; set; }
         public virtual DbSet<Reaction> Reaction { get; set; }
 
@@ -57,7 +57,7 @@ namespace TwittAPI.Models
                 entity.Property(e => e.PostId).HasColumnName("PostID");
             });
 
-            modelBuilder.Entity<Post>(entity =>
+            modelBuilder.Entity<Twitt>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 

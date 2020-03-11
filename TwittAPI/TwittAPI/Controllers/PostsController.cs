@@ -88,7 +88,7 @@ namespace TwittAPI.Controllers
 
         // POST: api/posts
         [HttpPost]
-        public IActionResult PostMessage([FromBody] Post post)
+        public IActionResult PostMessage([FromBody] Twitt post)
         {
             if (post.Message.Length > 200)
             {

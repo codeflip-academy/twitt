@@ -49,7 +49,7 @@ namespace TwittAPI.Controllers
         }
         
         [HttpPost]
-        public IActionResult CreateProfile([FromBody] ProfilePost profile)
+        public IActionResult CreateProfile([FromBody] ProfileModels profile)
         {
             var p = new Profile();
             

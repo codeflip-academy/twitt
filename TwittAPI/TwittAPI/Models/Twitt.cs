@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace TwittAPI.Models
 {
-    public partial class Post
+    public partial class Twitt
     {
-        public Post()
+        public Twitt()
         {
             Comment = new HashSet<Comment>();
             Reaction = new HashSet<Reaction>();

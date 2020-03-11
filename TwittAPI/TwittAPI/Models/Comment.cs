@@ -10,7 +10,7 @@ namespace TwittAPI.Models
         public string Message { get; set; }
         public int ProfileId { get; set; }
         public int PostId { get; set; }
-        public virtual Post Post { get; set; }
+        public virtual Twitt Post { get; set; }
         public virtual Profile Profile { get; set; }
     }
 }
