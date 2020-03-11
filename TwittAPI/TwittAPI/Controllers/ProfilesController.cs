@@ -34,6 +34,7 @@ namespace TwittAPI.Controllers
         public IActionResult GetProfile(int id)
         {
             var profile = _context.Profile.Find(id);
+
             if (profile == null)
             {
                 return NotFound();
@@ -61,7 +62,6 @@ namespace TwittAPI.Controllers
             {
                 var usernameExists = _context.Profile.Where(x => x.UserName == profile.UserName).FirstOrDefault() != null;
                 
-                
                 if (usernameExists)
                 {
                     return BadRequest("Username already exists.");
@@ -71,7 +71,6 @@ namespace TwittAPI.Controllers
             {
                 return BadRequest("No password given");
             }
-
             else if (profile != null)
             {
                 profile.Status = ProfileState.Active;
@@ -81,6 +80,7 @@ namespace TwittAPI.Controllers
             p.UserName = profile.UserName;
             p.Password = profile.Password;
             p.Status = profile.Status;
+
             _context.Profile.Add(p);
             
             _context.SaveChanges();
