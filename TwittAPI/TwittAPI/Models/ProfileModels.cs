@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TwittAPI.Models
 {
-    public class ProfilePost
+    public class ProfileModels
     {
         public int Id { get; set; }
         public string FullName { get; set; }

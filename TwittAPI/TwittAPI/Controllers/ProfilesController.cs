@@ -52,20 +52,15 @@ namespace TwittAPI.Controllers
         public IActionResult CreateProfile([FromBody] ProfileModels profile)
         {
             var p = new Profile();
-            
+            var usernameExists = _context.Profile.Where(x => x.UserName == profile.UserName).FirstOrDefault() != null;
+
             if (profile.FullName == null)
             {
                 return BadRequest("No Full Name given");
             }
-            
-            else if (profile.UserName == null)
+            else if (usernameExists)
             {
-                var usernameExists = _context.Profile.Where(x => x.UserName == profile.UserName).FirstOrDefault() != null;
-                
-                if (usernameExists)
-                {
-                    return BadRequest("Username already exists.");
-                }
+                return BadRequest("Username already exists.");
             }
             else if (profile.Password == null)
             {
