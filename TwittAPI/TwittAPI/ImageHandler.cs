@@ -11,10 +11,10 @@ using SixLabors.ImageSharp.Formats.Png;
 
 namespace TwittAPI
 {
-    public class ImageConverter : object
+    public class ImageHandler : object
     {
         private readonly string _connectionString;
-        public ImageConverter(string connectionString)
+        public ImageHandler(string connectionString)
         {
             _connectionString = connectionString;
         }

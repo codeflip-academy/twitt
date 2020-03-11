@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\black\\OneDrive\\Documents\\Class Projects\\twitt\\TwittAPI\\TwittAPI\\TwittAPI.csproj": {}
+    "C:\\Users\\Parker\\Documents\\CodeFlip\\twitt\\TwittAPI\\TwittAPI\\TwittAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\black\\OneDrive\\Documents\\Class Projects\\twitt\\TwittAPI\\TwittAPI\\TwittAPI.csproj": {
+    "C:\\Users\\Parker\\Documents\\CodeFlip\\twitt\\TwittAPI\\TwittAPI\\TwittAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\black\\OneDrive\\Documents\\Class Projects\\twitt\\TwittAPI\\TwittAPI\\TwittAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Parker\\Documents\\CodeFlip\\twitt\\TwittAPI\\TwittAPI\\TwittAPI.csproj",
         "projectName": "TwittAPI",
-        "projectPath": "C:\\Users\\black\\OneDrive\\Documents\\Class Projects\\twitt\\TwittAPI\\TwittAPI\\TwittAPI.csproj",
-        "packagesPath": "C:\\Users\\black\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\black\\OneDrive\\Documents\\Class Projects\\twitt\\TwittAPI\\TwittAPI\\obj\\",
+        "projectPath": "C:\\Users\\Parker\\Documents\\CodeFlip\\twitt\\TwittAPI\\TwittAPI\\TwittAPI.csproj",
+        "packagesPath": "C:\\Users\\Parker\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Parker\\Documents\\CodeFlip\\twitt\\TwittAPI\\TwittAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\black\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Parker\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

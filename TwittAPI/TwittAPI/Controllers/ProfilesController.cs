@@ -41,7 +41,7 @@ namespace TwittAPI.Controllers
             }
             else if(profile.Picture != null)
             {
-                var image = new ImageConverter(connectionString: _config.GetConnectionString("TwittDatabase"));
+                var image = new ImageHandler(connectionString: _config.GetConnectionString("TwittDatabase"));
 
                 image.GetImageFromProfile(profile);
             }
@@ -89,7 +89,7 @@ namespace TwittAPI.Controllers
 
             if (profile.Picture != null)
             {
-                var image = new ImageConverter(connectionString: _config.GetConnectionString("TwittDatabase"));
+                var image = new ImageHandler(connectionString: _config.GetConnectionString("TwittDatabase"));
 
                 image.StoreImageProfile(profile);
             }
