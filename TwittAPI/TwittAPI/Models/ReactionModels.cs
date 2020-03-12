@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace TwittAPI.Models
 {
-    public partial class Reaction
+    public class ReactionModels
     {
         public int Id { get; set; }
-        public bool State { get; set; }
+        public string Response { get; set; }
         public int Profile { get; set; }
         public int Post { get; set; }
         public virtual Twitt PostNavigation { get; set; }

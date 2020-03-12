@@ -70,8 +70,8 @@ namespace TwittAPI.Controllers
             {
                 var like = Reactions.Like;
                 var disLike = Reactions.DisLike;
-                var likes = _context.Reaction.Where(l => l.Response == true && l.Post == post.Id).Count();
-                var dislikes = _context.Reaction.Where(l => l.Response == false && l.Post == post.Id).Count();
+                var likes = _context.Reaction.Where(l => l.State == Reactions.Like && l.Post == post.Id).Count();
+                var dislikes = _context.Reaction.Where(l => l.State == Reactions.DisLike && l.Post == post.Id).Count();
                 var commentCount = _context.CommentsCount.Where(c => c.PostId == post.Id).FirstOrDefault();
                 if(commentCount == null)
                 {
@@ -90,18 +90,30 @@ namespace TwittAPI.Controllers
 
         // POST: api/posts
         [HttpPost]
-        public IActionResult PostMessage([FromBody] Twitt post)
+        public IActionResult PostMessage([FromBody] TwittModels post)
         {
+            var p = new Twitt();
+
             if (post.Message.Length > 200)
             {
                 return BadRequest("Message must be 200 characters or less");
             }
 
-            _context.Post.Add(post);
+            p.Message = post.Message;
+            p.ProfileId = post.ProfileId;
 
-            //Check if an image exists, if one does use the ImageConverter
+            _context.Post.Add(p);
 
             _context.SaveChanges();
+
+            post.Id = p.Id;
+
+            if(post.Picture != null)
+            {
+                var image = new ImageHandler(connectionString: _config.GetConnectionString("TwittDatabase"));
+
+                image.StoreImagePost(post);
+            }
 
             return Ok(post);
         }
