@@ -8,7 +8,7 @@ namespace TwittAPI.Models
     public class ReactionModels
     {
         public int Id { get; set; }
-        public string Response { get; set; }
+        public string LikeOrDislike { get; set; }
         public int Profile { get; set; }
         public int Post { get; set; }
         public virtual Twitt PostNavigation { get; set; }

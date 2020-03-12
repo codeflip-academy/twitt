@@ -41,8 +41,9 @@ namespace TwittAPI.Controllers
                 }
                 else
                 {
-                    return BadRequest("User already reacted to this post.");
+                    return BadRequest("Cannont give same reaction twice.");
                 }
+              
 
                 _context.SaveChanges();
                 return Ok(reaction);
