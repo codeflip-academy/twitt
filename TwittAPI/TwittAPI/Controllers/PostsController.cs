@@ -82,8 +82,6 @@ namespace TwittAPI.Controllers
                 }
             }
 
-
-
             return Ok(new PostFeed(postList, page, pages));
         }
 

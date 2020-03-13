@@ -34,6 +34,7 @@ namespace TwittAPI.Controllers
         public IActionResult GetProfile(int id)
         {
             var profile = _context.Profile.Find(id);
+            var profilePicture = "";
 
             if (profile == null)
             {
@@ -41,11 +42,21 @@ namespace TwittAPI.Controllers
             }
             else if (profile.Picture != null)
             {
-                var image = new ImageHandler(connectionString: _config.GetConnectionString("TwittDatabase"));
-
-                image.GetImageFromProfile(profile);
+                profilePicture = Convert.ToBase64String(profile.Picture);
             }
-            return Ok(profile);
+
+            var profileModel = new ProfileModels()
+            {
+                Id = profile.Id,
+                FullName = profile.FullName,
+                UserName = profile.UserName,
+                Password = profile.Password,
+                Picture = profilePicture,
+                Description = profile.Description,
+                Status = profile.Status
+            };
+
+            return Ok(profileModel);
         }
 
         [HttpPost]
@@ -89,9 +100,7 @@ namespace TwittAPI.Controllers
                 image.StoreImageProfile(profile);
             }
 
-
-
-            return Ok(profile);
+            return Ok($"{profile.UserName} was created.");
         }
 
         [HttpDelete("{id}")]
@@ -106,7 +115,7 @@ namespace TwittAPI.Controllers
                     _context.Profile.Update(profile);
                     _context.SaveChanges();
                     transaction.Commit();
-                    return Ok(profile);
+                    return Ok($"{profile.UserName} was deactivated.");
                 }
                 catch (Exception e)
                 {
