@@ -11,7 +11,7 @@ using TwittAPI.Presentation;
 
 namespace TwittAPI.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace TwittAPI.Controllers
             _config = config;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("api/post/{id}/comments")]
         public IActionResult GetPostComments(int id, [FromQuery] int page)
         {
             var pageSize = Convert.ToInt32(_config.GetSection("Pagination")["CommentPageSize"]);
@@ -76,9 +76,16 @@ namespace TwittAPI.Controllers
         }
 
         // POST: api/comments
-        [HttpPost]
-        public IActionResult PostComment([FromBody] Comment comment)
+        [HttpPost("api/profile/{profileid}/comment")]
+        public IActionResult PostComment(int profileId, [FromBody] Comment comment)
         {
+            comment.ProfileId = profileId;
+
+            if (comment.ProfileId != profileId)
+            {
+                return BadRequest();
+            }
+
             if (comment.Message.Length > 200)
             {
                 return BadRequest("Comment must be 200 characters or less");
@@ -92,7 +99,7 @@ namespace TwittAPI.Controllers
         }
 
         // DELETE: api/comments/id
-        [HttpDelete("{id}")]
+        [HttpDelete("api/comment/{id}")]
         public IActionResult DeleteComment(int id)
         {
             var twittCS = new TwittContextService(_config, _context);
