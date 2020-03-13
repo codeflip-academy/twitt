@@ -89,6 +89,15 @@ namespace TwittAPI.Controllers
         [HttpPost("api/profile/{profileid}/post")]
         public IActionResult PostMessage(int profileId, [FromBody] MessageModels post)
         {
+            var profile = _context.Profile.Find(profileId);
+            var messageHelper = new MessageHelper();
+            var helper = messageHelper.IsProfileActive(profile);
+            
+            if (helper == false)
+            {
+                return BadRequest("User is not authorized to post");
+            }
+
             var p = new Message();
 
             post.ProfileId = profileId;
