@@ -11,7 +11,7 @@ namespace TwittAPI.Models
         public string LikeOrDislike { get; set; }
         public int Profile { get; set; }
         public int Post { get; set; }
-        public virtual Twitt PostNavigation { get; set; }
+        public virtual Message PostNavigation { get; set; }
         public virtual Profile ProfileNavigation { get; set; }
     }
 }

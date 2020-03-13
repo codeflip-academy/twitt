@@ -38,7 +38,7 @@ namespace TwittAPI.Controllers
                 return BadRequest("Requsted page must be greater than 0.");
             }
 
-            var numberOfPosts = _context.Post.Count();
+            var numberOfPosts = _context.Message.Count();
             var pages = numberOfPosts / pageSize;
 
             if (numberOfPosts % pageSize != 0)
@@ -52,9 +52,9 @@ namespace TwittAPI.Controllers
             }
 
             var rowsToSkip = (page - 1) * pageSize;
-            var posts = _context.Post
+            var posts = _context.Message
                 .Where(
-                    x => _context.Post
+                    x => _context.Message
                     .OrderBy(y => y.Id)
                     .Select(y => y.Id)
                     .Skip(rowsToSkip)
@@ -66,49 +66,49 @@ namespace TwittAPI.Controllers
 
             var postList = new List<PostPresentation>();
 
-            foreach(var post in posts)
+            foreach (var post in posts)
             {
                 var like = Reactions.Like;
                 var disLike = Reactions.DisLike;
-                var likes = _context.Reaction.Where(l => l.State == Reactions.Like && l.Post == post.Id).Count();
-                var dislikes = _context.Reaction.Where(l => l.State == Reactions.DisLike && l.Post == post.Id).Count();
-                var commentCount = _context.CommentsCount.Where(c => c.PostId == post.Id).FirstOrDefault();
-                if(commentCount == null)
+                var likes = _context.Reaction.Where(l => l.LikeOrDislike == Reactions.Like && l.Message == post.Id).Count();
+                var dislikes = _context.Reaction.Where(l => l.LikeOrDislike == Reactions.DisLike && l.Message == post.Id).Count();
+                var commentCount = _context.CommentsCount.Where(c => c.MessageId == post.Id).FirstOrDefault();
+                if (commentCount == null)
                 {
                     postList.Add(new PostPresentation(post, 0, likes, dislikes));
                 }
                 else
                 {
-                    postList.Add( new PostPresentation(post, commentCount.CommentCount, likes, dislikes) );
+                    postList.Add(new PostPresentation(post, commentCount.CommentCount, likes, dislikes));
                 }
             }
 
-          
+
 
             return Ok(new PostFeed(postList, page, pages));
         }
 
         // POST: api/posts
         [HttpPost]
-        public IActionResult PostMessage([FromBody] TwittModels post)
+        public IActionResult PostMessage([FromBody] MessageModels post)
         {
-            var p = new Twitt();
+            var p = new Message();
 
             if (post.Message.Length > 200)
             {
                 return BadRequest("Message must be 200 characters or less");
             }
 
-            p.Message = post.Message;
+            p.Text = post.Message;
             p.ProfileId = post.ProfileId;
 
-            _context.Post.Add(p);
+            _context.Message.Add(p);
 
             _context.SaveChanges();
 
             post.Id = p.Id;
 
-            if(post.Picture != null)
+            if (post.Picture != null)
             {
                 var image = new ImageHandler(connectionString: _config.GetConnectionString("TwittDatabase"));
 

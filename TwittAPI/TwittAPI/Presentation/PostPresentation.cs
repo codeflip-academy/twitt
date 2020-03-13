@@ -9,10 +9,10 @@ namespace TwittAPI.Presentation
 {
     public class PostPresentation
     {
-        public PostPresentation(Twitt post, int? commentCount, int likes, int dislikes)
+        public PostPresentation(Message post, int? commentCount, int likes, int dislikes)
         {
             ID = post.Id;
-            Message = post.Message;
+            Message = post.Text;
             Picture = post.Picture;
             Profile = new PostProfilePresentation(post.Profile.FullName, post.Profile.UserName, post.Profile.Picture);
             Likes = likes;

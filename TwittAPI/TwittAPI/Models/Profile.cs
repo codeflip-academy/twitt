@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace TwittAPI.Models
 {
@@ -9,9 +8,10 @@ namespace TwittAPI.Models
         public Profile()
         {
             Comment = new HashSet<Comment>();
-            Post = new HashSet<Twitt>();
+            Message = new HashSet<Message>();
             Reaction = new HashSet<Reaction>();
         }
+
         public int Id { get; set; }
         public string FullName { get; set; }
         public string UserName { get; set; }
@@ -19,8 +19,9 @@ namespace TwittAPI.Models
         public byte[] Picture { get; set; }
         public string Description { get; set; }
         public bool Status { get; set; }
+
         public virtual ICollection<Comment> Comment { get; set; }
-        public virtual ICollection<Twitt> Post { get; set; }
+        public virtual ICollection<Message> Message { get; set; }
         public virtual ICollection<Reaction> Reaction { get; set; }
     }
 }

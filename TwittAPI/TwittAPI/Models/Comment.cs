@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace TwittAPI.Models
 {
@@ -9,8 +8,9 @@ namespace TwittAPI.Models
         public int Id { get; set; }
         public string Message { get; set; }
         public int ProfileId { get; set; }
-        public int PostId { get; set; }
-        public virtual Twitt Post { get; set; }
+        public int MessageId { get; set; }
+
+        public virtual Message MessageNavigation { get; set; }
         public virtual Profile Profile { get; set; }
     }
 }

@@ -2,7 +2,7 @@ USE [Twitt]
 
 GO
 
-CREATE TABLE [Post]
+CREATE TABLE [Message]
 (
 	[ID] INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	[Message] VARCHAR(200),

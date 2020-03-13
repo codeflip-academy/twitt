@@ -7,9 +7,9 @@ CREATE TABLE [Comment]
 	[ID] INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	[Message] VARCHAR(200),
 	[ProfileID] INT NOT NULL,
-	[PostID] INT NOT NULL,
+	[MessageID] INT NOT NULL,
 	FOREIGN KEY ([ProfileID]) REFERENCES [Profile](ID),
-	FOREIGN KEY ([PostID]) REFERENCES [Post](ID)
+	FOREIGN KEY ([MessageID]) REFERENCES [Message](ID)
 )
 
 GO

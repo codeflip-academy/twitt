@@ -49,7 +49,7 @@ namespace TwittAPI
             }
         }
 
-        public void StoreImagePost(TwittModels post)
+        public void StoreImagePost(MessageModels post)
         {
             var id = post.Id;
             var s = post.Picture;
@@ -102,7 +102,7 @@ namespace TwittAPI
             }
         }
 
-        public void GetImageFromPost(Twitt post)
+        public void GetImageFromPost(Message post)
         {
             var id = post.Id;
             byte[] byteArray;

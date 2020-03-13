@@ -8,8 +8,9 @@ namespace TwittAPI.Models
         public int Id { get; set; }
         public bool LikeOrDislike { get; set; }
         public int Profile { get; set; }
-        public int Post { get; set; }
-        public virtual Twitt PostNavigation { get; set; }
+        public int Message { get; set; }
+
+        public virtual Message MessageNavigation { get; set; }
         public virtual Profile ProfileNavigation { get; set; }
     }
 }

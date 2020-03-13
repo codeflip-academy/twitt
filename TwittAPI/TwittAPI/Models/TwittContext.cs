@@ -17,9 +17,11 @@ namespace TwittAPI.Models
 
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<CommentsCount> CommentsCount { get; set; }
-        public virtual DbSet<Twitt> Post { get; set; }
+        public virtual DbSet<Message> Message { get; set; }
         public virtual DbSet<Profile> Profile { get; set; }
         public virtual DbSet<Reaction> Reaction { get; set; }
+
+      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,21 +33,21 @@ namespace TwittAPI.Models
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PostId).HasColumnName("PostID");
+                entity.Property(e => e.MessageId).HasColumnName("MessageID");
 
                 entity.Property(e => e.ProfileId).HasColumnName("ProfileID");
 
-                entity.HasOne(d => d.Post)
+                entity.HasOne(d => d.MessageNavigation)
                     .WithMany(p => p.Comment)
-                    .HasForeignKey(d => d.PostId)
+                    .HasForeignKey(d => d.MessageId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Comment__PostID__3D5E1FD2");
+                    .HasConstraintName("FK__Comment__Message__3E52440B");
 
                 entity.HasOne(d => d.Profile)
                     .WithMany(p => p.Comment)
                     .HasForeignKey(d => d.ProfileId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Comment__Profile__3C69FB99");
+                    .HasConstraintName("FK__Comment__Profile__3D5E1FD2");
             });
 
             modelBuilder.Entity<CommentsCount>(entity =>
@@ -54,14 +56,15 @@ namespace TwittAPI.Models
 
                 entity.ToView("CommentsCount");
 
-                entity.Property(e => e.PostId).HasColumnName("PostID");
+                entity.Property(e => e.MessageId).HasColumnName("MessageID");
             });
 
-            modelBuilder.Entity<Twitt>(entity =>
+            modelBuilder.Entity<Message>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.Message)
+                entity.Property(e => e.Text)
+                    .HasColumnName("Message")
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
@@ -70,14 +73,18 @@ namespace TwittAPI.Models
                 entity.Property(e => e.ProfileId).HasColumnName("ProfileID");
 
                 entity.HasOne(d => d.Profile)
-                    .WithMany(p => p.Post)
+                    .WithMany(p => p.Message)
                     .HasForeignKey(d => d.ProfileId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Post__ProfileID__398D8EEE");
+                    .HasConstraintName("FK__Message__Profile__3A81B327");
             });
 
             modelBuilder.Entity<Profile>(entity =>
             {
+                entity.HasIndex(e => e.UserName)
+                    .HasName("UQ__Profile__C9F28456E33DCF75")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Description)
@@ -94,8 +101,6 @@ namespace TwittAPI.Models
                     .HasMaxLength(16)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Picture).HasMaxLength(1);
-
                 entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -106,17 +111,17 @@ namespace TwittAPI.Models
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.HasOne(d => d.PostNavigation)
+                entity.HasOne(d => d.MessageNavigation)
                     .WithMany(p => p.Reaction)
-                    .HasForeignKey(d => d.Post)
+                    .HasForeignKey(d => d.Message)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Reaction__Post__412EB0B6");
+                    .HasConstraintName("FK__Reaction__Messag__4316F928");
 
                 entity.HasOne(d => d.ProfileNavigation)
                     .WithMany(p => p.Reaction)
                     .HasForeignKey(d => d.Profile)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Reaction__Profil__403A8C7D");
+                    .HasConstraintName("FK__Reaction__Profil__4222D4EF");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -19,17 +19,17 @@ namespace TwittAPI.Controllers
     [ApiController]
     public class ProfilesController : ControllerBase
     {
-        
+
         private IConfiguration _config;
-        
+
         private readonly TwittContext _context;
-        
+
         public ProfilesController(TwittContext context, IConfiguration config)
         {
             _context = context;
             _config = config;
         }
-        
+
         [HttpGet("{id}")]
         public IActionResult GetProfile(int id)
         {
@@ -39,7 +39,7 @@ namespace TwittAPI.Controllers
             {
                 return NotFound("Profile doesn't exist. :(");
             }
-            else if(profile.Picture != null)
+            else if (profile.Picture != null)
             {
                 var image = new ImageHandler(connectionString: _config.GetConnectionString("TwittDatabase"));
 
@@ -47,7 +47,7 @@ namespace TwittAPI.Controllers
             }
             return Ok(profile);
         }
-        
+
         [HttpPost]
         public IActionResult CreateProfile([FromBody] ProfileModels profile)
         {
@@ -70,14 +70,14 @@ namespace TwittAPI.Controllers
             {
                 profile.Status = ProfileState.Active;
             }
-            
+
             p.FullName = profile.FullName;
             p.UserName = profile.UserName;
             p.Password = profile.Password;
             p.Status = profile.Status;
 
             _context.Profile.Add(p);
-            
+
             _context.SaveChanges();
 
             profile.Id = p.Id;
@@ -89,7 +89,7 @@ namespace TwittAPI.Controllers
                 image.StoreImageProfile(profile);
             }
 
-           
+
 
             return Ok(profile);
         }
@@ -97,7 +97,7 @@ namespace TwittAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeactivateProfile(int id)
         {
-            using(var transaction = _context.Database.BeginTransaction())
+            using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
@@ -115,6 +115,6 @@ namespace TwittAPI.Controllers
                 }
             }
         }
-            
+
     }
 }

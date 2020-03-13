@@ -50,7 +50,7 @@ namespace TwittAPI.Models
             //DeleteReactions();
 
             //Get all the reactions on a message / post ID
-              var reactions = _context.Reaction.Where(c => c.Post == id);
+            var reactions = _context.Reaction.Where(c => c.Message == id);
 
             //Loop through the reactions connected to the messageID and delete them
             if (reactions != null)
@@ -62,7 +62,7 @@ namespace TwittAPI.Models
             }
 
             //Get all the comments on message/post ID
-            var comments = _context.Comment.Where(c => c.PostId == id);
+            var comments = _context.Comment.Where(c => c.MessageId == id);
 
             //Loop through the comments connected to the messageID and delete them
             foreach (var comment in comments)
@@ -71,7 +71,7 @@ namespace TwittAPI.Models
             }
 
             //Get the messageID and delete the message 
-            var message = _context.Post.Where(c => c.Id == id).FirstOrDefault();
+            var message = _context.Message.Where(c => c.Id == id).FirstOrDefault();
 
             if (message == null)
             {

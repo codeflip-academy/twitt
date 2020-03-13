@@ -29,13 +29,13 @@ namespace TwittAPI.Controllers
         [HttpPost]
         public IActionResult Reaction(Reaction reaction)
         {
-            if(reaction.Profile != 0 && reaction.Post != 0)
+            if (reaction.Profile != 0 && reaction.Message != 0)
             {
                 var userReactions = _context.Reaction
-                    .Where(r => r.Profile == reaction.Profile && r.Post == reaction.Post)
+                    .Where(r => r.Profile == reaction.Profile && r.Message == reaction.Message)
                     .Count();
 
-                if(userReactions < 1)
+                if (userReactions < 1)
                 {
                     _context.Reaction.Add(reaction);
                 }
@@ -43,7 +43,7 @@ namespace TwittAPI.Controllers
                 {
                     return BadRequest("Cannont give same reaction twice.");
                 }
-              
+
 
                 _context.SaveChanges();
                 return Ok(reaction);
