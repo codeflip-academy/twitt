@@ -71,7 +71,9 @@ namespace TwittAPI.Controllers
                 }
 
                 _context.SaveChanges();
-                return Ok(reaction);
+                var likes = _context.Reaction.Where(l => l.LikeOrDislike == Reactions.Like && l.Message == reaction.MessageID).Count();
+                var dislikes = _context.Reaction.Where(l => l.LikeOrDislike == Reactions.DisLike && l.Message == reaction.MessageID).Count();
+                return Ok(new {likes, dislikes});
 
             }
             return BadRequest("Data is missing from the request.");
