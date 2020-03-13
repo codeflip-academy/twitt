@@ -81,6 +81,15 @@ namespace TwittAPI.Controllers
         {
             comment.ProfileId = profileId;
 
+            var profile = _context.Profile.Find(profileId);
+            var messageHelper = new MessageHelper();
+            var helper = messageHelper.IsProfileActive(profile);
+
+            if (helper == false)
+            {
+                return BadRequest("User is not authorized to post");
+            }
+
             if (comment.ProfileId != profileId)
             {
                 return BadRequest();

@@ -29,9 +29,12 @@ namespace TwittAPI.Controllers
         [HttpPost]
         public IActionResult Reaction(ReactionModels reaction)
         {
-            var react = new Reaction();
+            var prevReaction = _context.Reaction.Where(x => x.Profile == reaction.ProfileID && x.Message == reaction.MessageID).FirstOrDefault();
+            var stringValue = prevReaction == null ? "" : Reactions.ConvertToString(prevReaction.LikeOrDislike);
+
             if (reaction.ProfileID != 0 && reaction.MessageID != 0)
             {
+                var react = new Reaction();
                 var userReactions = _context.Reaction
                     .Where(r => r.Profile == reaction.ProfileID && r.Message == reaction.MessageID)
                     .Count();
@@ -39,18 +42,37 @@ namespace TwittAPI.Controllers
                 react.Message = reaction.MessageID;
                 react.Profile = reaction.ProfileID;
 
+                if (reaction.LikeOrDislike == "Like")
+                {
+                    react.LikeOrDislike = true;
+                }
+                else if (reaction.LikeOrDislike == "DisLike")
+                {
+                    react.LikeOrDislike = false;
+                }
+
                 if (userReactions < 1)
                 {
                     _context.Reaction.Add(react);
                 }
+                else if (reaction.LikeOrDislike == stringValue)
+                {
+                    _context.Remove(prevReaction);
+                }
+                else if (reaction.LikeOrDislike != stringValue)
+                {
+                    _context.Reaction.Remove(prevReaction);
+                    _context.Add(react);
+                }
+
                 else
                 {
                     return BadRequest("Cannont give same reaction twice.");
                 }
 
-
                 _context.SaveChanges();
                 return Ok(reaction);
+
             }
             return BadRequest("Data is missing from the request.");
         }
