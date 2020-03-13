@@ -27,17 +27,21 @@ namespace TwittAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Reaction(Reaction reaction)
+        public IActionResult Reaction(ReactionModels reaction)
         {
-            if (reaction.Profile != 0 && reaction.Message != 0)
+            var react = new Reaction();
+            if (reaction.ProfileID != 0 && reaction.MessageID != 0)
             {
                 var userReactions = _context.Reaction
-                    .Where(r => r.Profile == reaction.Profile && r.Message == reaction.Message)
+                    .Where(r => r.Profile == reaction.ProfileID && r.Message == reaction.MessageID)
                     .Count();
+
+                react.Message = reaction.MessageID;
+                react.Profile = reaction.ProfileID;
 
                 if (userReactions < 1)
                 {
-                    _context.Reaction.Add(reaction);
+                    _context.Reaction.Add(react);
                 }
                 else
                 {
