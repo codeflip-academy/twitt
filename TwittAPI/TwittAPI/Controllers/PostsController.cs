@@ -12,7 +12,7 @@ using TwittAPI.Presentation;
 namespace TwittAPI.Controllers
 {
 
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class PostsController : ControllerBase
     {
@@ -27,8 +27,7 @@ namespace TwittAPI.Controllers
             _config = config;
         }
 
-        // GET: api/Posts
-        [HttpGet]
+        [HttpGet("api/[controller]")]
         public IActionResult GetPosts([FromQuery] int page)
         {
             var pageSize = Convert.ToInt32(_config.GetSection("Pagination")["PostPageSize"]);
@@ -89,10 +88,17 @@ namespace TwittAPI.Controllers
         }
 
         // POST: api/posts
-        [HttpPost]
-        public IActionResult PostMessage([FromBody] MessageModels post)
+        [HttpPost("api/profile/{profileid}/post")]
+        public IActionResult PostMessage(int profileId, [FromBody] MessageModels post)
         {
             var p = new Message();
+
+            post.ProfileId = profileId;
+
+            if (post.ProfileId != profileId)
+            {
+                return BadRequest();
+            }
 
             if (post.Message.Length > 200)
             {
@@ -118,8 +124,7 @@ namespace TwittAPI.Controllers
             return Ok(post);
         }
 
-        // DELETE: api/posts/id
-        [HttpDelete("{id}")]
+        [HttpDelete("api/post/{id}")]
         public IActionResult DeleteMessage(int id)
         {
             var twittCS = new TwittContextService(_config, _context);
