@@ -6,7 +6,7 @@ CREATE TABLE [Message]
 (
 	[ID] INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	[Message] VARCHAR(200),
-	[Picture] VARBINARY NULL,
+	[Picture] VARBINARY(MAX) NULL,
 	[ProfileID] INT NOT NUll,
 	FOREIGN KEY ([ProfileID]) REFERENCES [Profile](ID)
 )

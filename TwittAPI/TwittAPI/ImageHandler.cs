@@ -22,7 +22,6 @@ namespace TwittAPI
         public byte[] ConvertStringToByteArray(string image)
         {
             byte[] imageBytes = Convert.FromBase64String(image);
-
             return imageBytes;
         }
 
@@ -60,9 +59,10 @@ namespace TwittAPI
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = @"Update Post SET Picture = @pic WHERE ID = @id";
+                    command.CommandText = @"Update Message SET Picture = @pic WHERE ID = @id";
 
-                    var pic = ConvertStringToByteArray(s);
+                    var imageArr = ConvertStringToByteArray(s);
+                    var pic = OptimizeImage(imageArr);
 
                     command.Parameters.AddWithValue(@"pic", pic);
                     command.Parameters.AddWithValue(@"id", id);
@@ -78,9 +78,38 @@ namespace TwittAPI
             using (MemoryStream ms = new MemoryStream(byteArrayIn))
             {
                 var image = Image.Load(ms);
+                var encoder = new JpegEncoder()
+                {
+                    Quality = 40
+                };
+                image.Save(ms, encoder);
 
                 return image;
             }
+        }
+        public byte[] OptimizeImage(byte[] byteArrayIn)
+        {
+            Image image;
+            byte[] byteArr;
+
+            using (MemoryStream ms = new MemoryStream(byteArrayIn))
+            {
+                image = Image.Load(ms);
+            }
+            using (MemoryStream ms = new MemoryStream(byteArrayIn))
+            {
+                var encoder = new JpegEncoder()
+                {
+                    Quality = 40
+                };
+                image.Save(ms, encoder);
+            }
+            using (MemoryStream ms = new MemoryStream(byteArrayIn))
+            {
+                byteArr = ms.ToArray();
+            }
+            return byteArr;
+
         }
 
         public void GetImageFromProfile(Profile profile)
@@ -113,7 +142,7 @@ namespace TwittAPI
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = @"SELECT Picture FROM Post WHERE ID = @id";
+                    command.CommandText = @"SELECT Picture FROM Message WHERE ID = @id";
                     command.Parameters.AddWithValue("@id", id);
                     byteArray = (byte[])command.ExecuteScalar();
                     ConvertByteArrayToImage(byteArray);
