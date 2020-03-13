@@ -58,7 +58,7 @@ namespace TwittAPI.Controllers
                     .Select(y => y.Id)
                     .Skip(rowsToSkip)
                     .Take(pageSize)
-                    .Contains(x.Id) && x.Profile.Status != ProfileState.Deleted
+                    .Contains(x.Id)
                 )
                 .Include("Profile")
                 .ToList();
