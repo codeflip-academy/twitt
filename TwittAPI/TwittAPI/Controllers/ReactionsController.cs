@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace TwittAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ReactionsController : ControllerBase
     {
@@ -26,9 +25,10 @@ namespace TwittAPI.Controllers
             _config = config;
         }
 
-        [HttpPost]
-        public IActionResult Reaction(ReactionModels reaction)
+        [HttpPost("api/posts/{postId}/reactions")]
+        public IActionResult Reaction(int postId, [FromBody] ReactionModels reaction)
         {
+            reaction.MessageID = postId; 
             var prevReaction = _context.Reaction.Where(x => x.Profile == reaction.ProfileID && x.Message == reaction.MessageID).FirstOrDefault();
             var stringValue = prevReaction == null ? "" : Reactions.ConvertToString(prevReaction.LikeOrDislike);
 
