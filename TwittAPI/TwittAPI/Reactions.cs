@@ -14,10 +14,10 @@ namespace TwittAPI
             switch(state)
             {
                 case true:
-                    stringValue = "Liked";
+                    stringValue = "Like";
                     break;
                 case false:
-                    stringValue = "DisLiked";
+                    stringValue = "DisLike";
                     break;
                 default:
                     stringValue = "";
