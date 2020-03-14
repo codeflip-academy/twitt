@@ -25,7 +25,7 @@ namespace TwittAPI.Controllers
             _config = config;
         }
 
-        [HttpPost("api/posts/{postId}/reactions")]
+        [HttpPost("api/post/{postId}/reactions")]
         public IActionResult Reaction(int postId, [FromBody] ReactionModels reaction)
         {
             reaction.MessageID = postId; 
