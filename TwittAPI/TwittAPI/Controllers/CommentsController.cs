@@ -110,10 +110,11 @@ namespace TwittAPI.Controllers
             }
 
             _context.Comment.Add(comment);
-
             _context.SaveChanges();
 
-            return Ok(comment);
+            var commentPresentation = new CommentPresentation(comment.Id, comment.Message, comment.Profile);
+
+            return Ok(commentPresentation);
         }
 
         // DELETE: api/comments/id
