@@ -65,21 +65,27 @@ namespace TwittAPI.Controllers
                 .ToList();
 
             var postList = new List<PostPresentation>();
+            var profiles = new Dictionary<string, PostProfilePresentation>();
+            var postProfiles = posts.Select(p => new { p.Profile.FullName, p.Profile.UserName, p.Profile.Picture } ).Distinct();
 
-            foreach (var post in posts)
+            // Store all distinct usernames in dictionary
+            foreach(var p in postProfiles)
             {
-                var commentCount = _context.CommentsCount.Where(c => c.MessageId == post.Id).FirstOrDefault();
-                if (commentCount == null)
-                {
-                    postList.Add(new PostPresentation(post, 0));
-                }
-                else
-                {
-                    postList.Add(new PostPresentation(post, commentCount.CommentCount));
-                }
+                profiles.Add(p.UserName, new PostProfilePresentation(p.FullName, p.UserName, p.Picture));
             }
 
-            return Ok(new PostFeed(postList, page, pages));
+            // Add each post to post presentation
+            foreach (var post in posts)
+            {
+                var commentCountOrNull = _context.CommentsCount.Where(c => c.MessageId == post.Id).FirstOrDefault();
+                var commentCount = commentCountOrNull == null ? 0 : commentCountOrNull.CommentCount;
+
+                postList.Add(new PostPresentation(post, commentCount));
+            }
+
+            var newsFeed = new PostFeed(postList, page, pages);
+
+            return Ok(new { newsFeed, profiles });
         }
 
         // POST: api/posts

@@ -12,11 +12,10 @@ namespace TwittAPI.Presentation
         {
             ID = id;
             Message = message;
-            Profile = new PostProfilePresentation(profile.FullName, profile.UserName, profile.Picture);
+            UserName = profile.UserName;
         }
         public int ID { get; set; }
         public string Message { get; set; }
-        public PostProfilePresentation Profile { get; set; }
-
+        public string UserName { get; set; }
     }
 }

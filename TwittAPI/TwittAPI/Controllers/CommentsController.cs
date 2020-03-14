@@ -11,7 +11,6 @@ using TwittAPI.Presentation;
 
 namespace TwittAPI.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase
     {
@@ -26,7 +25,7 @@ namespace TwittAPI.Controllers
             _config = config;
         }
 
-        [HttpGet("api/post/{id}/comments")]
+        [HttpGet("api/posts/{id}/comments")]
         public IActionResult GetPostComments(int id, [FromQuery] int page)
         {
             var pageSize = Convert.ToInt32(_config.GetSection("Pagination")["CommentPageSize"]);
@@ -38,7 +37,6 @@ namespace TwittAPI.Controllers
 
             var commentCount = _context.CommentsCount.Where(c => c.MessageId == id).FirstOrDefault();
             int numberOfComments = commentCount.CommentCount != null ? (int)commentCount.CommentCount : 0;
-
             var pages = numberOfComments / pageSize;
 
             if (numberOfComments % pageSize != 0)
@@ -66,13 +64,24 @@ namespace TwittAPI.Controllers
 
             var commentList = new List<CommentPresentation>();
 
+            var profiles = new Dictionary<string, PostProfilePresentation>();
+            var commentProfiles = comments.Select(c => new { c.Profile.FullName, c.Profile.UserName, c.Profile.Picture }).Distinct();
+
+            // Store all distinct usernames in dictionary
+            foreach (var c in commentProfiles)
+            {
+                profiles.Add(c.UserName, new PostProfilePresentation(c.FullName, c.UserName, c.Picture));
+            }
+
             foreach (var comment in comments)
             {
                 var commentPresentation = new CommentPresentation(comment.Id, comment.Message, comment.Profile);
                 commentList.Add(commentPresentation);
             }
 
-            return Ok(new CommentFeed(commentList, page, pages));
+            var commentFeed = new CommentFeed(commentList, page, pages);
+
+            return Ok(new { commentFeed, profiles });
         }
 
         // POST: api/comments

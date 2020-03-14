@@ -12,6 +12,7 @@ using System.IO;
 using SixLabors.ImageSharp.Formats;
 using System.Net;
 using System.Security.Policy;
+using TwittAPI.Presentation;
 
 namespace TwittAPI.Controllers
 {
@@ -45,18 +46,17 @@ namespace TwittAPI.Controllers
                 profilePicture = Convert.ToBase64String(profile.Picture);
             }
 
-            var profileModel = new ProfileModels()
+            var profilePresentation = new ProfilePresentation()
             {
                 Id = profile.Id,
                 FullName = profile.FullName,
                 UserName = profile.UserName,
-                Password = profile.Password,
                 Picture = profilePicture,
                 Description = profile.Description,
                 Status = profile.Status
             };
 
-            return Ok(profileModel);
+            return Ok(profilePresentation);
         }
 
         [HttpPost]
