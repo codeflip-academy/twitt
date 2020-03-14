@@ -11,18 +11,18 @@ namespace TwittAPI.Presentation
     {
         public PostPresentation(Message post, int? commentCount)
         {
-            ID = post.Id;
+            PostID = post.Id;
+            UserName = post.Profile.UserName;
             Message = post.Text;
             Picture = post.Picture;
-            Profile = new PostProfilePresentation(post.Profile.FullName, post.Profile.UserName, post.Profile.Picture);
             Likes = CountLikes(post);
             Dislikes = CountDisLikes(post);
             NumberOfComments = commentCount;
         }
-        public int ID { get; set; }
+        public int PostID { get; set; }
+        public string UserName { get; set; }
         public string Message { get; set; }
         public byte[] Picture { get; set; }
-        public PostProfilePresentation Profile { get; set; }
         public int Likes { get; set; }
         public int Dislikes { get; set; }
         public int? NumberOfComments { get; set; }
