@@ -15,7 +15,7 @@ using System.Security.Policy;
 
 namespace TwittAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/profile")]
     [ApiController]
     public class ProfilesController : ControllerBase
     {

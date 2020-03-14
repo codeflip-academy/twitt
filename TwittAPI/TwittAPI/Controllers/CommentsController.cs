@@ -76,10 +76,12 @@ namespace TwittAPI.Controllers
         }
 
         // POST: api/comments
-        [HttpPost("api/profile/{profileid}/comment")]
-        public IActionResult PostComment(int profileId, [FromBody] Comment comment)
+        [HttpPost("api/post/{id}/comment")]
+        public IActionResult PostComment(int id, [FromBody] Comment comment)
         {
-            comment.ProfileId = profileId;
+            comment.MessageId = id;
+
+            var profileId = comment.ProfileId;
 
             var profile = _context.Profile.Find(profileId);
             var messageHelper = new MessageHelper();
@@ -90,7 +92,7 @@ namespace TwittAPI.Controllers
                 return BadRequest("User is not authorized to post");
             }
 
-            if (comment.ProfileId != profileId)
+            if (comment.MessageId != id)
             {
                 return BadRequest();
             }
